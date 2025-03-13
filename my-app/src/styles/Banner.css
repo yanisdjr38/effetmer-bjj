@@ -1,4 +1,9 @@
+@font-face {
+  font-family: "Geoform";
+  src: url(../assets/geoform/Geoform-Bold.otf);
+}
 .banner {
+  font-family: "Geoform";
   height: 15rem;
   display: flex;
   justify-content: center;

@@ -1,3 +1,5 @@
+import "../styles/MySessions.css";
+
 function MySessions() {
   return (
     <section className="mysessions">
