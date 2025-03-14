@@ -2,21 +2,29 @@
   font-family: "Geofrom";
   src: url(../assets/geoform/Geoform-Bold.otf);
 }
-h3 {
+.mytechniques h3 {
   font-family: "Geofrom";
-  font-size: 3em;
+  font-size: 2em;
   color: #2e5077;
 }
 
+.mytechniques {
+  display: flex;
+  flex-direction: column;
+  margin: 1em;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 1em;
+}
 .techniquescard {
-  font-size: 1.5em;
+  font-family: "roboto";
+  font-size: 1em;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 1rem;
   padding: 1rem;
-  border: 1px solid #2e5077;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 3px solid #2e5077;
+  border-radius: 1em;
+  max-width: 20%;
 }
