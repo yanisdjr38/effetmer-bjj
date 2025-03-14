@@ -4,14 +4,13 @@
 }
 .banner {
   font-family: "Geoform";
-  height: 15rem;
+  height: 11 rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #2e5077;
   color: white;
-  font-size: 2rem;
+  font-size: 1rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5rem;
@@ -20,9 +19,9 @@
 }
 
 h2 {
-  font-size: 1rem;
+  font-size: 0.5rem;
   font-weight: 800;
   color: white;
   text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  margin-top: -2rem;
+  margin-top: -1rem;
 }

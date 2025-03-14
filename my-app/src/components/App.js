@@ -7,7 +7,9 @@ function App() {
     <div>
       <Banner />
       <MySessions />
-      <MyTechniques />
+      <section className="mytechniques">
+        <MyTechniques />
+      </section>
     </div>
   );
 }
