@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
+import data from "../data/data.json";
+import "../styles/TechniquesCard.css";
 
-function TechniquesCard({ Techniques }) {
+function TechniquesCard() {
+  const [showMore, setShowMore] = useState(false);
+
+  const handleShowMore = () => {
+    setShowMore(!showMore);
+  };
+
   return (
-    <div className="techniquecard">
-      <h2>{Techniques.name}</h2>
-      <p>{Techniques.description}</p>
+    <div className="techniquescard">
+      <h4>{data.name}</h4>
+      {showMore && <p>{data.description}</p>}
+      <button onClick={handleShowMore} className="btnAfficherPlus">
+        {showMore ? "Afficher Moins" : "Afficher Plus"}
+      </button>
     </div>
   );
 }

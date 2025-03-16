@@ -1,10 +1,12 @@
 import "../styles/MyTechniques.css";
+import TechniquesCard from "./TechniquesCard";
 
 function MyTechniques() {
   return (
-    <section className="mytechniques">
+    <div className="mytechniques">
       <h3>My Techniques </h3>
-    </section>
+      <TechniquesCard />
+    </div>
   );
 }
 
