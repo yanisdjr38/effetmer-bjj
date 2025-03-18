@@ -18,15 +18,10 @@
   border-radius: 1em;
 }
 
-.sessionsCard {
-  font-family: "roboto";
-  font-size: 1em;
+.mysessions-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  border: 3px solid #2e5077;
-  border-radius: 1em;
-  max-width: 20%;
+  flex-wrap: wrap; /* Permet de passer à la ligne si l'écran est trop petit */
+  justify-content: flex-start; /* Centre les cartes horizontalement */
+  gap: 20px; /* Espacement entre les cartes */
+  padding: 20px;
 }

@@ -3,19 +3,31 @@ import data from "../data/data.json";
 import "../styles/TechniquesCard.css";
 
 function TechniquesCard() {
-  const [showMore, setShowMore] = useState(false);
+  // État pour gérer l'affichage de chaque description
+  const [showMore, setShowMore] = useState({});
 
-  const handleShowMore = () => {
-    setShowMore(!showMore);
+  // Fonction pour gérer le toggle d'une technique spécifique
+  const handleShowMore = (index) => {
+    setShowMore((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index], // Bascule l'état spécifique à l'index
+    }));
   };
 
   return (
-    <div className="techniquescard">
-      <h4>{data.name}</h4>
-      {showMore && <p>{data.description}</p>}
-      <button onClick={handleShowMore} className="btnAfficherPlus">
-        {showMore ? "Afficher Moins" : "Afficher Plus"}
-      </button>
+    <div className="techniques-container">
+      {data.techniques.map((technique, index) => (
+        <div key={index} className="techniquescard">
+          <h4>{technique.name}</h4>
+          {showMore[index] && <p>{technique.description}</p>}
+          <button
+            onClick={() => handleShowMore(index)}
+            className="btnAfficherPlus"
+          >
+            {showMore[index] ? "Afficher Moins" : "Afficher Plus"}
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
