@@ -1,16 +1,16 @@
-import Banner from "./Banner.js";
-import MySessions from "./MySessions.js";
-import MyTechniques from "./MyTechniques.js";
-import NavBar from "./NavBar.js";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Homepage from "../pages/HomePage.js"; // Assure-toi que le chemin est correct !
+import TrainingPage from "../pages/TrainingPage.js";
 
 function App() {
   return (
-    <div>
-      <Banner />
-      <MySessions />
-      <MyTechniques />
-      <NavBar />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Homepage />} />{" "}
+        {/* Homepage affichée au démarrage */}
+        <Route path="/training" element={<TrainingPage />} />
+      </Routes>
+    </Router>
   );
 }
 
