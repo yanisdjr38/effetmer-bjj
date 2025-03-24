@@ -1,0 +1,29 @@
+@font-face {
+  font-family: "Geofrom";
+  src: url(../assets/geoform/Geoform-Bold.otf);
+}
+
+.searchbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.searchbar input {
+  width: 300px;
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid #2e5077;
+  padding: 5px;
+}
+
+.searchbar button:hover {
+  background-color: #2e5077;
+  color: white;
+}
+
+.searchbar button {
+  padding: 5px;
+  border-radius: 5px;
+}
