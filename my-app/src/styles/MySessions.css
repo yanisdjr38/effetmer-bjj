@@ -6,7 +6,7 @@
 .mysessions h3 {
   font-family: "Geofrom";
   font-size: 2em;
-  color: #2e5077;
+  color: #0f0f0f;
 }
 
 .mysessions {
@@ -16,6 +16,19 @@
   background-color: white;
   padding: 1rem;
   border-radius: 1em;
+}
+
+.addBtn {
+  font-family: "Geoform";
+  border: 1px solid #0f0f0f;
+  max-width: fit-content;
+  padding: 0.5em 1em;
+  border-radius: 5px;
+}
+
+.addBtn:hover {
+  border-color: #00ff88;
+  color: #00ff88;
 }
 
 .mysessions-container {
