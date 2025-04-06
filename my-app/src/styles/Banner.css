@@ -23,5 +23,10 @@ h2 {
   font-weight: 800;
   color: white;
   text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  margin-top: -1rem;
+  margin-top: 0.5rem;
+}
+
+.banner img {
+  width: 30%;
+  height: 30%;
 }
