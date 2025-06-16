@@ -129,9 +129,43 @@ textarea:focus {
 }
 
 form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 18px rgba(0, 150, 136, 0.1);
+  margin-bottom: 2rem;
+}
+
+form select {
+  background-color: #fff;
+  border: 1px solid #b2ebf2;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  font-family: inherit;
+  color: #2e3b3e;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon fill='%2300989c' points='70,100 30,40 110,40'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+}
+
+form textarea {
+  resize: vertical;
+  min-height: 80px;
+  border: 1px solid #b2ebf2;
+  border-radius: 12px;
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+form textarea:focus {
+  border-color: #00acc1;
+  box-shadow: 0 0 0 2px rgba(0, 172, 193, 0.2);
+  outline: none;
 }
 
 /* ===== Bottom NavBar ===== */
@@ -195,6 +229,66 @@ form {
   margin-left: 0.5rem;
   background: #00acc1;
   animation: pulse 1s infinite;
+}
+
+/*===TimePage===*/
+.timer-page {
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.timer-display {
+  font-size: 4rem;
+  font-family: "Courier New", monospace;
+  font-weight: bold;
+  margin: 1.5rem 0;
+  color: #007c91;
+}
+
+.timer-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.timer-buttons button {
+  flex: 1 1 40%;
+  max-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.circular-chart {
+  display: block;
+  margin: 1rem auto;
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 3.8;
+}
+
+.circle {
+  fill: none;
+  stroke: #00acc1;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.35s;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+.percentage {
+  fill: #333;
+  font-size: 0.5rem;
+  text-anchor: middle;
 }
 
 @keyframes pulse {
