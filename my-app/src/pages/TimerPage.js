@@ -1,71 +1,186 @@
 import React, { useEffect, useRef, useState } from "react";
+import { FaPause, FaPlay, FaPlus, FaStop } from "react-icons/fa";
+import soundSrc from "../assets/beep.mp3";
+import "../styles.css";
 
 function TimerPage() {
-  const [seconds, setSeconds] = useState(0);
-  const [active, setActive] = useState(false);
-  const interval = useRef(null);
+  const [programs, setPrograms] = useState([
+    { id: 1, name: "Sparring", work: 300, rest: 60, rounds: 5 },
+    { id: 2, name: "Drill", work: 180, rest: 30, rounds: 4 },
+  ]);
+  const [currentProgram, setCurrentProgram] = useState(null);
+  const [step, setStep] = useState("work");
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [round, setRound] = useState(1);
+  const [isRunning, setIsRunning] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const intervalRef = useRef(null);
+  const audioRef = useRef(null);
 
-  const start = () => {
-    if (!active) {
-      setActive(true);
-      interval.current = setInterval(() => setSeconds((s) => s + 1), 1000);
-    }
+  const [newProgram, setNewProgram] = useState({
+    name: "",
+    work: "",
+    rest: "",
+    rounds: "",
+  });
+
+  const handleCreateProgram = () => {
+    const newP = {
+      ...newProgram,
+      id: Date.now(),
+      work: parseInt(newProgram.work),
+      rest: parseInt(newProgram.rest),
+      rounds: parseInt(newProgram.rounds),
+    };
+    setPrograms([...programs, newP]);
+    setNewProgram({ name: "", work: 0, rest: 0, rounds: 1 });
   };
 
-  const pause = () => {
-    setActive(false);
-    clearInterval(interval.current);
+  const startProgram = (program) => {
+    clearInterval(intervalRef.current);
+    setCurrentProgram(program);
+    setRound(1);
+    setStep("work");
+    setTimeLeft(program.work);
+    setIsRunning(true);
+    setIsPaused(false);
   };
 
-  const reset = () => {
-    pause();
-    setSeconds(0);
-  };
-
-  const startSparring = () => {
-    reset();
-    let total = 0;
-    const rounds = [
-      { label: "Sparring", duration: 300 },
-      { label: "Repos", duration: 60 },
-    ];
-    let i = 0;
-
-    interval.current = setInterval(() => {
-      total++;
-      setSeconds(total);
-      if (total >= rounds[i].duration) {
-        i = (i + 1) % rounds.length;
-        total = 0;
-        alert(`Changement : ${rounds[i].label}`);
-      }
-    }, 1000);
+  const stopProgram = () => {
+    clearInterval(intervalRef.current);
+    setCurrentProgram(null);
+    setIsRunning(false);
+    setIsPaused(false);
+    setTimeLeft(0);
+    setStep("work");
+    setRound(1);
   };
 
   useEffect(() => {
-    return () => clearInterval(interval.current);
-  }, []);
+    if (isRunning && !isPaused && currentProgram) {
+      intervalRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            if (audioRef.current) audioRef.current.play();
+            if (step === "work") {
+              setStep("rest");
+              return currentProgram.rest;
+            } else {
+              if (round >= currentProgram.rounds) {
+                setIsRunning(false);
+                return 0;
+              }
+              setRound((r) => r + 1);
+              setStep("work");
+              return currentProgram.work;
+            }
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(intervalRef.current);
+  }, [isRunning, isPaused, step, round, currentProgram]);
+
+  const togglePause = () => {
+    setIsPaused(!isPaused);
+  };
+
+  const formatTime = (s) => {
+    const min = String(Math.floor(s / 60)).padStart(2, "0");
+    const sec = String(s % 60).padStart(2, "0");
+    return `${min}:${sec}`;
+  };
+
+  const progress = currentProgram
+    ? (timeLeft /
+        (step === "work" ? currentProgram.work : currentProgram.rest)) *
+      100
+    : 0;
 
   return (
-    <div className="container timer-page" style={{ textAlign: "center" }}>
-      <h2>Chronomètre</h2>
-      <h1>
-        {String(Math.floor(seconds / 60)).padStart(2, "0")}:
-        {String(seconds % 60).padStart(2, "0")}
-      </h1>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "1rem",
-          flexWrap: "wrap",
-        }}
-      >
-        <button onClick={start}>Démarrer</button>
-        <button onClick={pause}>Pause</button>
-        <button onClick={reset}>Reset</button>
-        <button onClick={startSparring}>Mode Sparring</button>
+    <div className="container timer-page">
+      <h2>Programmes d'entraînement</h2>
+      <audio ref={audioRef} src={soundSrc} preload="auto" />
+
+      <div className="program-list">
+        {programs.map((p) => (
+          <button key={p.id} onClick={() => startProgram(p)}>
+            {p.name} ({p.rounds} x {p.work}s / {p.rest}s)
+          </button>
+        ))}
       </div>
+
+      <div className="new-program">
+        <input
+          placeholder="Nom"
+          value={newProgram.name}
+          onChange={(e) =>
+            setNewProgram({ ...newProgram, name: e.target.value })
+          }
+        />
+        <input
+          type="number"
+          placeholder="Travail (s)"
+          value={newProgram.work}
+          onChange={(e) =>
+            setNewProgram({ ...newProgram, work: e.target.value })
+          }
+        />
+        <input
+          type="number"
+          placeholder="Repos (s)"
+          value={newProgram.rest}
+          onChange={(e) =>
+            setNewProgram({ ...newProgram, rest: e.target.value })
+          }
+        />
+        <input
+          type="number"
+          placeholder="Rounds"
+          value={newProgram.rounds}
+          onChange={(e) =>
+            setNewProgram({ ...newProgram, rounds: e.target.value })
+          }
+        />
+        <button onClick={handleCreateProgram}>
+          <FaPlus /> Ajouter
+        </button>
+      </div>
+
+      {currentProgram && (
+        <div className="timer-box">
+          <div className="timer-label">
+            {step === "work" ? "Travail" : "Repos"} (Round {round}/
+            {currentProgram.rounds})
+          </div>
+          <div className="timer-display">
+            <svg viewBox="0 0 36 36" className="circular-chart">
+              <path
+                className="circle-bg"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                className="circle"
+                strokeDasharray={`${progress}, 100`}
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <text x="18" y="20.35" className="percentage">
+                {formatTime(timeLeft)}
+              </text>
+            </svg>
+          </div>
+          <div className="timer-controls">
+            <button onClick={togglePause}>
+              {isPaused ? <FaPlay /> : <FaPause />}{" "}
+              {isPaused ? "Reprendre" : "Pause"}
+            </button>
+            <button onClick={stopProgram}>
+              <FaStop /> Arrêter
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
