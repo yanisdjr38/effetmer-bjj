@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FaPause, FaPlay, FaPlus, FaStop } from "react-icons/fa";
+import { FaPause, FaPlay, FaPlus, FaStop, FaTrash } from "react-icons/fa";
 import soundSrc from "../assets/beep.mp3";
 import "../styles.css";
 
@@ -33,7 +33,15 @@ function TimerPage() {
       rounds: parseInt(newProgram.rounds),
     };
     setPrograms([...programs, newP]);
-    setNewProgram({ name: "", work: 0, rest: 0, rounds: 1 });
+    setNewProgram({ name: "", work: "", rest: "", rounds: "" });
+  };
+
+  const handleDeleteProgram = (id) => {
+    const confirm = window.confirm("Supprimer ce programme ?");
+    if (confirm) {
+      const filtered = programs.filter((p) => p.id !== id);
+      setPrograms(filtered);
+    }
   };
 
   const startProgram = (program) => {
@@ -105,9 +113,18 @@ function TimerPage() {
 
       <div className="program-list">
         {programs.map((p) => (
-          <button key={p.id} onClick={() => startProgram(p)}>
-            {p.name} ({p.rounds} x {p.work}s / {p.rest}s)
-          </button>
+          <div key={p.id} className="program-item-row">
+            <button className="program-button" onClick={() => startProgram(p)}>
+              {p.name} ({p.rounds} x {p.work}s / {p.rest}s)
+            </button>
+            <button
+              className="delete-button"
+              onClick={() => handleDeleteProgram(p.id)}
+              title="Supprimer"
+            >
+              <FaTrash />
+            </button>
+          </div>
         ))}
       </div>
 
