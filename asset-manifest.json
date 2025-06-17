@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/effetmer.bjj/static/css/main.ceb0b6f2.css",
-    "main.js": "/effetmer.bjj/static/js/main.f24dc054.js",
-    "static/media/beep.mp3": "/effetmer.bjj/static/media/beep.ee199954c91c2854cff5.mp3",
-    "index.html": "/effetmer.bjj/index.html",
-    "main.ceb0b6f2.css.map": "/effetmer.bjj/static/css/main.ceb0b6f2.css.map",
-    "main.f24dc054.js.map": "/effetmer.bjj/static/js/main.f24dc054.js.map"
+    "main.css": "/effetmer-bjj/static/css/main.ceb0b6f2.css",
+    "main.js": "/effetmer-bjj/static/js/main.2dc6c350.js",
+    "static/media/beep.mp3": "/effetmer-bjj/static/media/beep.ee199954c91c2854cff5.mp3",
+    "index.html": "/effetmer-bjj/index.html",
+    "main.ceb0b6f2.css.map": "/effetmer-bjj/static/css/main.ceb0b6f2.css.map",
+    "main.2dc6c350.js.map": "/effetmer-bjj/static/js/main.2dc6c350.js.map"
   },
   "entrypoints": [
     "static/css/main.ceb0b6f2.css",
-    "static/js/main.f24dc054.js"
+    "static/js/main.2dc6c350.js"
   ]
 }
