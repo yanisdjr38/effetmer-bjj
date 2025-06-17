@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import InstallPrompt from "./components/InstallPrompt";
 import Navbar from "./components/NavBar";
 import HomePage from "./pages/HomePage";
 import TechniquesPage from "./pages/TechniquesPage";
@@ -17,6 +18,7 @@ function App() {
         <Route path="/timer" element={<TimerPage />} />
       </Routes>
       <Navbar />
+      <InstallPrompt />
     </>
   );
 }
