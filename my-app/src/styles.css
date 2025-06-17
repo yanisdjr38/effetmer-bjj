@@ -291,6 +291,25 @@ form textarea:focus {
   text-anchor: middle;
 }
 
+.program-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.program-button {
+  flex-grow: 1;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  color: #ff4d4f;
+  cursor: pointer;
+  font-size: 1rem;
+}
 @keyframes pulse {
   0% {
     transform: scale(1);

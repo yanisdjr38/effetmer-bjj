@@ -9,13 +9,13 @@ import TrainingPage from "./pages/TrainingPage";
 function App() {
   return (
     <Router>
-      <NavBar />
       <Routes>
         <Route path="/home" element={<HomePage />} />
         <Route path="/training" element={<TrainingPage />} />
         <Route path="/techniques" element={<TechniquesPage />} />
         <Route path="/timer" element={<TimerPage />} />
       </Routes>
+      <NavBar />
     </Router>
   );
 }
