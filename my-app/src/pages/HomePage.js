@@ -6,6 +6,7 @@ import {
   FaDumbbell,
   FaHistory,
 } from "react-icons/fa";
+import logo from "../assets/logo.png";
 import ProgressCircle from "../components/ProgressCircle";
 import StatCard from "../components/StatCard";
 
@@ -73,7 +74,7 @@ function HomePage() {
 
   return (
     <div className="homepage">
-      <h2>Bienvenue 👋</h2>
+      <img src={logo} alt="EffetMer BJJ" className="logo-home" />
       <p>Voici un aperçu de ta progression :</p>
 
       <ProgressCircle

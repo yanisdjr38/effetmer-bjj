@@ -207,6 +207,14 @@ form textarea:focus {
 }
 
 /* ===== HomePage Enhancements ===== */
+
+.logo-home {
+  width: 160px;
+  height: auto;
+  margin: 20px auto;
+  display: block;
+}
+
 .homepage h2 {
   font-size: 2rem;
   color: #006064;
