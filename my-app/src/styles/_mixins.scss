@@ -1,0 +1,188 @@
+// ============================================================================
+// MIXINS - Utilitaires SCSS réutilisables
+// ============================================================================
+
+// 📱 Breakpoints responsifs
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == "xs" {
+    @media (min-width: var(--breakpoint-xs)) {
+      @content;
+    }
+  } @else if $breakpoint == "sm" {
+    @media (min-width: var(--breakpoint-sm)) {
+      @content;
+    }
+  } @else if $breakpoint == "md" {
+    @media (min-width: var(--breakpoint-md)) {
+      @content;
+    }
+  } @else if $breakpoint == "lg" {
+    @media (min-width: var(--breakpoint-lg)) {
+      @content;
+    }
+  } @else if $breakpoint == "xl" {
+    @media (min-width: var(--breakpoint-xl)) {
+      @content;
+    }
+  }
+}
+
+// Flexbox
+@mixin flex($direction: row, $justify: flex-start, $align: stretch, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  gap: $gap;
+}
+
+@mixin flex-center($gap: 0) {
+  @include flex(row, center, center, $gap);
+}
+
+@mixin flex-between($gap: 0) {
+  @include flex(row, space-between, center, $gap);
+}
+
+// Grid
+@mixin grid($columns: 1, $gap: var(--space-4)) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+}
+
+// Texte tronqué
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin truncate-lines($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// État focusé (accessibilité)
+@mixin focus-ring($color: var(--color-primary)) {
+  outline: 2px solid $color;
+  outline-offset: 2px;
+}
+
+// Transitions fluides
+@mixin transition($properties: all, $duration: var(--transition-base)) {
+  transition: $properties $duration;
+}
+
+// Superposition (overlay)
+@mixin overlay($background: rgba(0, 0, 0, 0.5)) {
+  position: fixed;
+  inset: 0;
+  background: $background;
+  z-index: 999;
+}
+
+// Centrage absolu
+@mixin center-absolute {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// Carte (card) standard
+@mixin card($padding: var(--space-6), $radius: var(--radius-lg)) {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: $radius;
+  padding: $padding;
+  box-shadow: var(--shadow-sm);
+  @include transition(all);
+
+  &:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+// Bouton de base
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  font-family: inherit;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  @include transition(all);
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+// Button primaire
+@mixin button-primary {
+  @include button-base;
+  background: var(--color-primary);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: var(--color-primary-dark);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+// Input de base
+@mixin input-base {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  color: var(--color-text);
+  @include transition(border-color, --shadow);
+
+  &:hover {
+    border-color: var(--color-border);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -1px;
+    border-color: var(--color-primary);
+  }
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+}
+
+// Container responsive
+@mixin container {
+  width: 100%;
+  max-width: min(100% - 2rem, 1280px);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 var(--space-4);
+
+  @include respond-to("md") {
+    max-width: min(100% - 3rem, 1024px);
+  }
+}

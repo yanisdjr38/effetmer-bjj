@@ -1,0 +1,282 @@
+// ============================================================================
+// LAYOUTS & PAGES - Styles spécifiques aux pages
+// ============================================================================
+
+@import "variables";
+@import "mixins";
+
+// Layout principal
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+
+  @include respond-to("md") {
+    flex-direction: row-reverse;
+  }
+}
+
+// Zone de contenu principal
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 5.5rem;
+
+  @include respond-to("md") {
+    padding-bottom: 0;
+    padding-left: 16rem;
+  }
+}
+
+// Container principal
+.container {
+  @include container;
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-6);
+}
+
+// Page principale
+.page {
+  animation: fade-in var(--transition-base);
+
+  &__header {
+    margin-bottom: var(--space-8);
+
+    h1 {
+      margin-bottom: var(--space-2);
+    }
+
+    p {
+      font-size: var(--font-size-lg);
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__content {
+    & > * + * {
+      margin-top: var(--space-6);
+    }
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Grille de cartes
+.card-grid {
+  @include grid(1, var(--space-4));
+
+  @include respond-to("sm") {
+    @include grid(2, var(--space-4));
+  }
+
+  @include respond-to("lg") {
+    @include grid(3, var(--space-4));
+  }
+}
+
+// Section de formulaire
+.form-section {
+  background: var(--color-bg-secondary);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-6);
+
+  .form-section__title {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .form-section__group {
+    @include grid(1, var(--space-5));
+
+    @include respond-to("md") {
+      @include grid(2, var(--space-5));
+    }
+  }
+}
+
+// Liste d'éléments
+.list {
+  @include flex(column, flex-start, stretch, var(--space-3));
+
+  &--compact {
+    gap: var(--space-2);
+  }
+
+  &__item {
+    @include card(var(--space-4), var(--radius-md));
+  }
+}
+
+// Statistiques
+.stats {
+  @include grid(2, var(--space-4));
+
+  @include respond-to("md") {
+    @include grid(4, var(--space-4));
+  }
+}
+
+// Timer
+.timer {
+  &__display {
+    font-family: var(--font-family-mono);
+    font-size: 3.5rem;
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    color: var(--color-primary);
+    margin: var(--space-8) 0;
+  }
+
+  &__controls {
+    @include flex-center(var(--space-4));
+    margin-top: var(--space-6);
+    flex-wrap: wrap;
+
+    button {
+      flex: 1;
+      min-width: 150px;
+    }
+  }
+}
+
+// Filters
+.filters {
+  background: var(--color-bg-secondary);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-6);
+  border: 1px solid var(--color-border);
+
+  &__group {
+    @include grid(1, var(--space-5));
+
+    @include respond-to("sm") {
+      @include grid(2, var(--space-4));
+    }
+
+    @include respond-to("md") {
+      @include grid(3, var(--space-4));
+    }
+  }
+
+  &__actions {
+    @include flex(row, flex-end, center, var(--space-3));
+    margin-top: var(--space-4);
+    flex-wrap: wrap;
+
+    button {
+      flex-shrink: 0;
+    }
+  }
+}
+
+// Home page spécifique
+.home-page {
+  &__hero {
+    text-align: center;
+    margin-bottom: var(--space-12);
+
+    img {
+      width: 6rem;
+      height: auto;
+      margin: 0 auto var(--space-4);
+      border-radius: var(--radius-lg);
+    }
+
+    h1 {
+      margin-bottom: var(--space-2);
+    }
+
+    p {
+      font-size: var(--font-size-lg);
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__stats {
+    @include grid(1, var(--space-4));
+
+    @include respond-to("sm") {
+      @include grid(2, var(--space-4));
+    }
+
+    &-row {
+      @include grid(1, var(--space-4));
+
+      @include respond-to("sm") {
+        @include grid(2, var(--space-4));
+      }
+
+      @include respond-to("lg") {
+        @include grid(1, var(--space-4));
+      }
+    }
+  }
+}
+
+// Training page
+.training-page {
+  &__list {
+    & > * + * {
+      margin-top: var(--space-4);
+    }
+  }
+
+  &__item {
+    @include card;
+  }
+}
+
+// Empty state
+.empty-state {
+  text-align: center;
+  padding: var(--space-12) var(--space-4);
+
+  svg {
+    font-size: 3rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  h3 {
+    margin-bottom: var(--space-2);
+    color: var(--color-text-secondary);
+  }
+
+  p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+  }
+
+  button {
+    margin: 0 auto;
+  }
+}
+
+// Loading state
+.loading {
+  padding: var(--space-12) var(--space-4);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+// Responsive adjustments
+@media (max-width: 639px) {
+  .container {
+    padding: var(--space-4);
+  }
+
+  .page__header {
+    margin-bottom: var(--space-6);
+  }
+}
