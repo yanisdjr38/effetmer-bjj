@@ -1,0 +1,112 @@
+// ============================================================================
+// MAIN STYLESHEET - Point d'entrée pour tous les styles
+// ============================================================================
+
+// 1. Variables et configuration
+@import "variables";
+@import "mixins";
+
+// 2. Résets et normalisations
+@import "reset";
+
+// 3. Composants réutilisables
+@import "components";
+
+// 4. Layouts et pages
+@import "layout";
+
+// ============================================================================
+// UTILITAIRES
+// ============================================================================
+
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.mt {
+  margin-top: var(--space-4);
+}
+.mb {
+  margin-bottom: var(--space-4);
+}
+.my {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+.mx {
+  margin-left: var(--space-4);
+  margin-right: var(--space-4);
+}
+
+.pt {
+  padding-top: var(--space-4);
+}
+.pb {
+  padding-bottom: var(--space-4);
+}
+.py {
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+.px {
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+.hidden {
+  display: none;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.rounded {
+  border-radius: var(--radius-lg);
+}
+.rounded-sm {
+  border-radius: var(--radius-sm);
+}
+.rounded-full {
+  border-radius: var(--radius-full);
+}
+
+.shadow {
+  box-shadow: var(--shadow-sm);
+}
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.gap-1 {
+  gap: var(--space-2);
+}
+.gap-2 {
+  gap: var(--space-4);
+}
+.gap-3 {
+  gap: var(--space-6);
+}

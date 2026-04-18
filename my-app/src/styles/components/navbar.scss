@@ -1,0 +1,160 @@
+/**
+ * NavBar - Modern bottom navigation (Strava/Samsung Health style)
+ * Fixed at bottom, responsive, icon-based with labels
+ */
+
+.navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  z-index: 100;
+
+  // Subtle shadow for depth
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: all 0.3s ease;
+  }
+}
+
+.navbar__container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: var(--nav-height, 70px);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--spacing-xs);
+
+  @media (min-width: 768px) {
+    padding: 0 var(--spacing-md);
+    height: 80px;
+  }
+}
+
+.navbar__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xxs);
+  flex: 1;
+  max-width: 100px;
+  aspect-ratio: 1;
+
+  // Touch-friendly sizing
+  min-height: 44px;
+  min-width: 44px;
+
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  border-radius: 12px;
+  padding: var(--spacing-xs);
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: all 0.2s ease;
+  }
+
+  // Hover state
+  &:hover {
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--color-primary);
+  }
+
+  // Focus state (accessibility)
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+
+  // Active state (current page)
+  &.navbar__link--active {
+    color: var(--color-primary);
+    background: linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.1),
+      rgba(124, 58, 237, 0.1)
+    );
+    font-weight: 600;
+
+    .navbar__icon {
+      animation: bounce 0.4s ease;
+    }
+  }
+
+  // Press state (active click)
+  &:active {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+}
+
+.navbar__icon {
+  font-size: 1.5rem;
+
+  @media (min-width: 768px) {
+    font-size: 1.75rem;
+  }
+}
+
+.navbar__label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media (min-width: 640px) {
+    font-size: 0.75rem;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 0.875rem;
+  }
+}
+
+// Animation for active state
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+// Ensure content doesn't hide behind navbar
+body {
+  padding-bottom: var(--nav-height, 70px);
+}
+
+// Dark mode variant (optional)
+@media (prefers-color-scheme: dark) {
+  .navbar {
+    background: rgba(17, 24, 39, 0.95);
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .navbar__link {
+    &:hover {
+      background: rgba(37, 99, 235, 0.15);
+    }
+
+    &.navbar__link--active {
+      background: linear-gradient(
+        135deg,
+        rgba(37, 99, 235, 0.15),
+        rgba(124, 58, 237, 0.15)
+      );
+    }
+  }
+}
