@@ -3,23 +3,30 @@
  * Displayed at top of page when app can be installed
  */
 
+@import "../styles/variables";
+@import "../styles/mixins";
+
 .install-banner {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  background: var(--gradient-accent);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
   color: white;
-  padding: var(--spacing-md) var(--spacing-md);
+  padding: var(--space-4) var(--space-4);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-md);
+  gap: var(--space-4);
   z-index: 1000;
-  box-shadow: 0 4px 16px rgba(255, 87, 34, 0.3);
+  box-shadow: 0 4px 16px rgba(89, 216, 229, 0.3);
 
   @media (min-width: 640px) {
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: var(--space-4) var(--space-6);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -30,7 +37,7 @@
 .install-banner__content {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--space-4);
   flex: 1;
   min-width: 0;
 }
@@ -60,7 +67,7 @@
 }
 
 .install-banner__subtitle {
-  margin: var(--spacing-xxs) 0 0 0;
+  margin: var(--space-1) 0 0 0;
   font-size: 0.75rem;
   opacity: 0.9;
 
@@ -72,12 +79,12 @@
 .install-banner__actions {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--space-2);
   flex-shrink: 0;
 }
 
 .install-banner__btn {
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--space-2) var(--space-4);
   border: none;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -86,7 +93,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-xs);
+  gap: var(--space-2);
   min-height: 36px;
   min-width: 36px;
   transition: all 0.2s ease;

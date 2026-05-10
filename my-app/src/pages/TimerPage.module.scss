@@ -7,26 +7,41 @@
   gap: var(--space-4);
 
   .timer_display_section {
-    @include card();
+    @include glass-card;
     padding: var(--space-6);
     text-align: center;
     background: linear-gradient(
       135deg,
-      var(--color-primary-50),
-      var(--color-accent-50)
+      rgba(89, 216, 229, 0.05),
+      rgba(177, 198, 249, 0.05)
     );
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle at 50% 0%,
+        rgba(89, 216, 229, 0.1),
+        transparent 70%
+      );
+      pointer-events: none;
+      border-radius: var(--radius-lg);
+    }
   }
 
   .timer_display {
     font-size: clamp(3rem, 10vw, 5rem);
-    font-weight: var(--font-bold);
-    color: var(--color-primary-600);
+    font-weight: 800;
+    color: var(--color-primary);
     font-family:
-      "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas,
+      Anybody, "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas,
       "Courier New", monospace;
     letter-spacing: 0.1em;
     margin: var(--space-4) 0;
     line-height: 1.2;
+    text-shadow: 0 0 30px rgba(89, 216, 229, 0.3);
 
     @include respond-to("sm") {
       font-size: 3.5rem;
@@ -35,10 +50,11 @@
 
   .timer_label {
     font-size: var(--text-sm);
-    color: var(--color-neutral-600);
+    color: var(--on-surface-variant);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: var(--space-4);
+    font-weight: 600;
   }
 
   .timer_controls {
@@ -57,14 +73,14 @@
       border: none;
       border-radius: var(--radius-md);
       font-size: var(--text-base);
-      font-weight: var(--font-semibold);
+      font-weight: 600;
       cursor: pointer;
       transition: all var(--transition-fast) ease;
       min-width: 100px;
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
+        box-shadow: 0 8px 24px rgba(89, 216, 229, 0.15);
       }
 
       &:active {
@@ -72,29 +88,26 @@
       }
 
       &.start {
-        background: var(--color-success-600);
-        color: white;
-
-        &:hover {
-          background: var(--color-success-700);
-        }
+        @include button-turquoise;
       }
 
       &.pause {
-        background: var(--color-warning-600);
-        color: white;
+        background: rgba(177, 198, 249, 0.2);
+        color: var(--color-secondary);
+        border: 1px solid var(--color-secondary);
 
         &:hover {
-          background: var(--color-warning-700);
+          background: rgba(177, 198, 249, 0.3);
         }
       }
 
       &.reset {
-        background: var(--color-danger-600);
-        color: white;
+        background: rgba(255, 76, 76, 0.1);
+        color: var(--color-error);
+        border: 1px solid rgba(255, 76, 76, 0.3);
 
         &:hover {
-          background: var(--color-danger-700);
+          background: rgba(255, 76, 76, 0.15);
         }
       }
 
@@ -117,24 +130,29 @@
 
     button {
       padding: var(--space-2) var(--space-3);
-      border: 2px solid var(--color-neutral-300);
-      background: white;
+      border: 2px solid rgba(89, 216, 229, 0.2);
+      background: rgba(89, 216, 229, 0.05);
       border-radius: var(--radius-md);
       font-size: var(--text-sm);
-      font-weight: var(--font-medium);
+      font-weight: 600;
       cursor: pointer;
       transition: all var(--transition-fast) ease;
-      color: var(--color-neutral-700);
+      color: var(--on-surface);
 
       &:hover {
-        border-color: var(--color-primary-400);
-        color: var(--color-primary-600);
+        border-color: var(--color-primary);
+        background: rgba(89, 216, 229, 0.1);
+        box-shadow: 0 0 12px rgba(89, 216, 229, 0.15);
       }
 
       &.active {
-        background: var(--color-primary-600);
-        border-color: var(--color-primary-600);
-        color: white;
+        background: linear-gradient(
+          135deg,
+          rgba(89, 216, 229, 0.3),
+          rgba(177, 198, 249, 0.15)
+        );
+        border-color: var(--color-primary);
+        color: var(--color-primary);
       }
     }
   }
@@ -152,7 +170,7 @@
   }
 
   .program_item {
-    @include card();
+    @include glass-card;
     padding: var(--space-3) var(--space-4);
     display: flex;
     align-items: center;
@@ -160,8 +178,8 @@
     transition: all var(--transition-base) ease;
 
     &:hover {
-      box-shadow: var(--shadow-md);
-      background: var(--color-neutral-50);
+      box-shadow: 0 0 20px rgba(89, 216, 229, 0.2);
+      border-color: var(--color-primary);
     }
 
     @include respond-to("sm") {
@@ -179,13 +197,14 @@
 
     .program_name {
       font-size: var(--text-base);
-      font-weight: var(--font-semibold);
-      color: var(--color-neutral-900);
+      font-weight: 600;
+      color: var(--on-surface);
+      font-family: Anybody, sans-serif;
     }
 
     .program_details {
       font-size: var(--text-sm);
-      color: var(--color-neutral-600);
+      color: var(--on-surface-variant);
       display: flex;
       gap: var(--space-3);
       flex-wrap: wrap;
@@ -202,49 +221,43 @@
 
     button {
       padding: var(--space-2) var(--space-3);
-      border: 1px solid var(--color-neutral-300);
-      background: white;
+      border: 1px solid rgba(89, 216, 229, 0.2);
+      background: rgba(89, 216, 229, 0.05);
       border-radius: var(--radius-md);
       font-size: var(--text-sm);
       cursor: pointer;
       transition: all var(--transition-fast) ease;
-      color: var(--color-neutral-700);
+      color: var(--on-surface);
 
       &:hover {
-        background: var(--color-neutral-50);
-        border-color: var(--color-neutral-400);
+        background: rgba(89, 216, 229, 0.1);
+        border-color: rgba(89, 216, 229, 0.3);
       }
 
       &.primary {
-        background: var(--color-primary-600);
-        color: white;
-        border-color: var(--color-primary-600);
-
-        &:hover {
-          background: var(--color-primary-700);
-        }
+        @include button-turquoise;
       }
 
       &.danger {
-        color: var(--color-danger-600);
-        border-color: var(--color-danger-200);
+        color: var(--color-error);
+        border-color: rgba(255, 76, 76, 0.2);
 
         &:hover {
-          background: var(--color-danger-50);
+          background: rgba(255, 76, 76, 0.1);
+          border-color: rgba(255, 76, 76, 0.3);
         }
       }
     }
   }
 
   .form_section {
-    @include card();
+    @include glass-card;
     padding: var(--space-4);
 
     h2 {
-      font-size: var(--text-lg);
-      font-weight: var(--font-semibold);
+      @include heading-md;
       margin-bottom: var(--space-4);
-      color: var(--color-neutral-900);
+      color: var(--on-surface);
     }
   }
 
@@ -269,15 +282,32 @@
 
     label {
       font-size: var(--text-sm);
-      font-weight: var(--font-medium);
-      color: var(--color-neutral-700);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     input,
     select {
-      @include input-base();
+      background: rgba(58, 123, 213, 0.08);
+      border: 1px solid rgba(89, 216, 229, 0.2);
+      color: var(--on-surface);
       padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
       font-size: var(--text-sm);
+      transition: all var(--transition-fast) ease;
+
+      &::placeholder {
+        color: var(--on-surface-variant);
+      }
+
+      &:focus {
+        outline: none;
+        background: rgba(58, 123, 213, 0.12);
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(89, 216, 229, 0.1);
+      }
     }
   }
 
@@ -285,6 +315,7 @@
     display: flex;
     gap: var(--space-3);
     margin-top: var(--space-4);
+    flex-direction: column;
 
     @include respond-to("sm") {
       flex-direction: row;
@@ -296,20 +327,22 @@
       border: none;
       border-radius: var(--radius-md);
       font-size: var(--text-sm);
-      font-weight: var(--font-medium);
+      font-weight: 600;
       cursor: pointer;
       transition: all var(--transition-fast) ease;
 
       &.primary {
-        @include button-primary();
+        @include button-turquoise;
       }
 
       &.secondary {
-        background: var(--color-neutral-100);
-        color: var(--color-neutral-900);
+        background: rgba(58, 123, 213, 0.1);
+        color: var(--color-secondary);
+        border: 1px solid rgba(177, 198, 249, 0.2);
 
         &:hover {
-          background: var(--color-neutral-200);
+          background: rgba(58, 123, 213, 0.15);
+          border-color: rgba(177, 198, 249, 0.3);
         }
       }
 
@@ -322,7 +355,7 @@
   .empty_state {
     text-align: center;
     padding: var(--space-8) var(--space-4);
-    color: var(--color-neutral-600);
+    color: var(--on-surface-variant);
 
     p {
       font-size: var(--text-base);
@@ -330,7 +363,7 @@
     }
 
     button {
-      @include button-primary();
+      @include button-turquoise;
       padding: var(--space-3) var(--space-6);
       margin-top: var(--space-4);
     }

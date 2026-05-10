@@ -1,36 +1,80 @@
 // ============================================================================
-// VARIABLES GLOBALES - Design System ultra-moderne (Strava/Samsung Health style)
+// DESIGN SYSTEM ZENITH FLOW - Dark Mode Glassmorphism
 // ============================================================================
 
-// 🎨 Palette de couleurs - Moderne et accessible
+// 🎨 Palette de couleurs Zenith Flow
 :root {
-  // Primaire - Bleu vibrant
-  --color-primary: #2563eb;
-  --color-primary-dark: #1e40af;
-  --color-primary-light: #3b82f6;
-  --color-primary-lighter: #dbeafe;
+  // PRIMAIRE - Turquoise vibrant (action et focus)
+  --color-primary: #59d8e5;
+  --color-primary-dark: #00a8b5;
+  --color-primary-light: #87f3ff;
+  --color-primary-container: #00a8b5;
+  --color-on-primary: #00363b;
 
-  // Accent - Orange énergique (Strava style)
+  // SECONDARY - Navy profond
+  --color-secondary: #b1c6f9;
+  --color-secondary-dark: #314671;
+  --color-secondary-container: #314671;
+  --color-on-secondary: #182f59;
+
+  // SURFACES - Dark mode premium
+  --color-surface: #121414;
+  --color-surface-dim: #121414;
+  --color-surface-bright: #38393a;
+  --color-surface-container-low: #1a1c1c;
+  --color-surface-container: #1e2020;
+  --color-surface-container-high: #282a2b;
+  --color-surface-container-highest: #333535;
+
+  // TEXT ET ACCENTS
+  --color-on-surface: #e2e2e2;
+  --color-on-surface-variant: #bcc9cb;
+  --color-outline: #869395;
+  --color-outline-variant: #3d494a;
+
+  // TERTIAIRE - Neutral warm
+  --color-tertiary: #c8c6c5;
+  --color-on-tertiary: #313030;
+  --color-tertiary-container: #999797;
+
+  // ERROR
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+
+  // BACKGROUND
+  --color-bg: #121414;
+  --color-on-background: #e2e2e2;
+
+  // INVERSE
+  --color-inverse-surface: #e2e2e2;
+  --color-inverse-on-surface: #2f3131;
+  --color-inverse-primary: #006971;
+
+  // LEGACY - Pour compatibilité
+  --color-text: #e2e2e2;
+  --color-text-secondary: #bcc9cb;
+  --color-text-muted: #869395;
+  --color-dark: #121414;
+  --color-border: #3d494a;
+  --color-bg-secondary: #1a1c1c;
+  --color-bg-tertiary: #1e2020;
+
+  // SUCCESS (pour entraînements terminés)
+  --color-success: #10b981;
+  --color-success-container: #047857;
+  --color-on-success: #ffffff;
+
+  // ACCENT classique
   --color-accent: #ff5722;
   --color-accent-dark: #e64a19;
 
-  // Gradient moderne
-  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-  --gradient-accent: linear-gradient(135deg, #ff5722 0%, #ff9800 100%);
-  --gradient-success: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+  // GRADIENTS
+  --gradient-primary: linear-gradient(135deg, #59d8e5 0%, #00a8b5 100%);
+  --gradient-accent: linear-gradient(135deg, #59d8e5 0%, #b1c6f9 100%);
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
 
-  // Neutres - Grises modernes
-  --color-dark: #0f172a;
-  --color-text: #1e293b;
-  --color-text-secondary: #64748b;
-  --color-text-muted: #94a3b8;
-  --color-bg: #ffffff;
-  --color-bg-secondary: #f8fafc;
-  --color-bg-tertiary: #f1f5f9;
-  --color-border: #e2e8f0;
-
-  // Sémantiques
-  --color-success: #16a34a;
+  // SÉMANTIQUES
   --color-warning: #ea580c;
   --color-danger: #dc2626;
 
@@ -46,14 +90,16 @@
   --space-12: 3rem; // 48px
   --space-16: 4rem; // 64px
 
-  // 🔤 Typographie
-  --font-family-sans:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  // 🔤 Typographie Zenith Flow
+  --font-family-display: "Anybody", system-ui, sans-serif; // Headlines
+  --font-family-body:
+    "Lexend", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; // Body
   --font-weight-light: 300;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
 
   --font-size-xs: 0.75rem; // 12px
   --font-size-sm: 0.875rem; // 14px

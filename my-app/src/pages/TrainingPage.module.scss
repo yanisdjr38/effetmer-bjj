@@ -2,24 +2,41 @@
 @import "../styles/mixins";
 
 .training_page {
+  padding-bottom: var(--space-12);
+  background: linear-gradient(
+    180deg,
+    var(--color-surface) 0%,
+    var(--color-surface-container) 100%
+  );
+  min-height: 100vh;
+
+  h2 {
+    @include heading-md;
+    margin-bottom: var(--space-6);
+  }
+
+  // ============================================================================
+  // FILTERS SECTION
+  // ============================================================================
+
   .filters_section {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    padding: var(--space-4);
-    background: var(--color-neutral-50);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-4);
+    gap: var(--space-4);
+    padding: var(--space-6) var(--space-5);
+    @include glass-card;
+    margin-bottom: var(--space-8);
 
     @include respond-to("sm") {
       flex-direction: row;
-      align-items: center;
+      align-items: flex-end;
       flex-wrap: wrap;
+      gap: var(--space-5);
     }
 
     @include respond-to("md") {
       flex-direction: row;
-      gap: var(--space-4);
+      gap: var(--space-5);
     }
   }
 
@@ -31,57 +48,93 @@
     min-width: 100%;
 
     @include respond-to("sm") {
-      min-width: 150px;
+      min-width: 180px;
       flex: 0 1 auto;
     }
 
     label {
-      font-size: var(--text-sm);
-      font-weight: var(--font-medium);
-      color: var(--color-neutral-700);
+      font-family: var(--font-family-body);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
     }
 
+    input,
     select {
       @include input-base();
-      padding: var(--space-2) var(--space-3);
-      font-size: var(--text-sm);
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--font-size-sm);
+      background: rgba(58, 123, 213, 0.1);
+      border-color: rgba(89, 216, 229, 0.2);
     }
   }
 
+  // ============================================================================
+  // STATS SUMMARY
+  // ============================================================================
+
   .stats_summary {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: var(--space-3);
-    margin-bottom: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-5);
+    margin-bottom: var(--space-8);
+    padding: var(--space-6) var(--space-5);
+    @include glass-card;
 
     @include respond-to("md") {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    > div {
+      text-align: center;
+      padding: var(--space-4);
+      background: rgba(89, 216, 229, 0.05);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(89, 216, 229, 0.1);
+    }
+
+    > div > div:first-child {
+      font-family: var(--font-family-display);
+      font-size: 1.875rem;
+      font-weight: 800;
+      color: var(--color-primary);
+      margin-bottom: var(--space-2);
+    }
+
+    > div > div:last-child {
+      font-size: var(--font-size-sm);
+      color: var(--color-on-surface-variant);
+      font-weight: var(--font-weight-medium);
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
     }
   }
 
   .sessions_list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-5);
   }
 
   .session_item {
-    @include card();
+    @include glass-card;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-4);
-    transition: all var(--transition-base) ease;
+    padding: var(--space-5);
+    @include transition(all);
 
     &:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-2px);
+      border-color: rgba(89, 216, 229, 0.5);
+      background: rgba(10, 36, 77, 0.9);
     }
 
     @include respond-to("sm") {
       flex-direction: column;
       align-items: flex-start;
-      gap: var(--space-3);
+      gap: var(--space-4);
     }
   }
 
@@ -89,24 +142,29 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: var(--space-2);
 
     .session_date {
-      font-size: var(--text-sm);
-      font-weight: var(--font-medium);
-      color: var(--color-primary-600);
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-base);
+      font-weight: 700;
+      color: var(--color-primary);
     }
 
     .session_duration {
-      font-size: var(--text-xs);
-      color: var(--color-neutral-600);
+      font-size: var(--font-size-sm);
+      color: var(--color-on-surface-variant);
     }
 
     .session_notes {
-      font-size: var(--text-sm);
-      color: var(--color-neutral-700);
+      font-size: var(--font-size-sm);
+      color: var(--color-on-surface-variant);
       line-height: var(--line-height-normal);
       margin-top: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      background: rgba(89, 216, 229, 0.05);
+      border-left: 2px solid rgba(89, 216, 229, 0.3);
+      border-radius: var(--radius-md);
     }
   }
 
@@ -121,17 +179,18 @@
     }
 
     button {
-      padding: var(--space-2) var(--space-3);
-      font-size: var(--text-sm);
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--font-size-sm);
       border-radius: var(--radius-md);
-      border: 1px solid var(--color-neutral-300);
-      background: white;
+      border: 1px solid rgba(89, 216, 229, 0.3);
+      background: rgba(89, 216, 229, 0.1);
+      color: var(--color-primary);
       cursor: pointer;
-      transition: all var(--transition-fast) ease;
+      @include transition(all);
 
       &:hover {
-        background: var(--color-neutral-50);
-        border-color: var(--color-neutral-400);
+        background: rgba(89, 216, 229, 0.15);
+        border-color: rgba(89, 216, 229, 0.5);
       }
 
       &:active {
@@ -139,11 +198,12 @@
       }
 
       &.danger {
-        color: var(--color-danger-600);
-        border-color: var(--color-danger-200);
+        color: var(--color-error);
+        border-color: rgba(255, 180, 171, 0.3);
+        background: rgba(255, 180, 171, 0.05);
 
         &:hover {
-          background: var(--color-danger-50);
+          background: rgba(255, 180, 171, 0.1);
         }
       }
 
@@ -155,30 +215,34 @@
 
   .empty_state {
     text-align: center;
-    padding: var(--space-8) var(--space-4);
-    color: var(--color-neutral-600);
+    padding: var(--space-12) var(--space-6);
+    color: var(--color-on-surface-variant);
+
+    svg {
+      font-size: 4rem;
+      color: rgba(89, 216, 229, 0.2);
+      margin-bottom: var(--space-4);
+    }
 
     p {
-      font-size: var(--text-base);
-      margin-bottom: var(--space-3);
+      @include body-lg;
+      margin-bottom: var(--space-4);
     }
 
     button {
-      @include button-primary();
-      padding: var(--space-3) var(--space-6);
+      @include button-turquoise;
     }
   }
 
   .form_section {
-    @include card();
-    padding: var(--space-4);
-    margin-bottom: var(--space-4);
+    @include glass-card;
+    padding: var(--space-6) var(--space-5);
+    margin-bottom: var(--space-8);
 
     h2 {
-      font-size: var(--text-lg);
-      font-weight: var(--font-semibold);
-      margin-bottom: var(--space-4);
-      color: var(--color-neutral-900);
+      @include heading-md;
+      margin-bottom: var(--space-6);
+      color: var(--color-on-surface);
     }
   }
 
@@ -186,67 +250,79 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-5);
 
     &:last-child {
       margin-bottom: 0;
     }
 
     label {
-      font-size: var(--text-sm);
-      font-weight: var(--font-medium);
-      color: var(--color-neutral-700);
+      font-family: var(--font-family-body);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-on-surface);
     }
 
     input,
     textarea,
     select {
       @include input-base();
-      padding: var(--space-2) var(--space-3);
-      font-size: var(--text-sm);
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--font-size-base);
+      background: rgba(58, 123, 213, 0.1);
+      border-color: rgba(89, 216, 229, 0.2);
+
+      &:focus {
+        background: rgba(58, 123, 213, 0.15);
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(89, 216, 229, 0.1);
+      }
     }
 
     textarea {
-      min-height: 100px;
+      min-height: 120px;
       resize: vertical;
+      font-family: var(--font-family-body);
     }
 
     .error {
-      font-size: var(--text-xs);
-      color: var(--color-danger-600);
+      font-size: var(--font-size-xs);
+      color: var(--color-error);
       margin-top: var(--space-1);
     }
   }
 
   .form_actions {
     display: flex;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
+    gap: var(--space-4);
+    margin-top: var(--space-6);
 
     @include respond-to("sm") {
-      flex-direction: row;
       justify-content: flex-end;
     }
 
     button {
       padding: var(--space-3) var(--space-6);
       border: none;
-      border-radius: var(--radius-md);
-      font-size: var(--text-sm);
-      font-weight: var(--font-medium);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
       cursor: pointer;
-      transition: all var(--transition-fast) ease;
+      @include transition(all);
+      min-height: 44px;
 
       &.primary {
-        @include button-primary();
+        @include button-turquoise;
       }
 
       &.secondary {
-        background: var(--color-neutral-100);
-        color: var(--color-neutral-900);
+        background: rgba(177, 198, 249, 0.1);
+        color: var(--color-secondary);
+        border: 1px solid rgba(177, 198, 249, 0.3);
 
         &:hover {
-          background: var(--color-neutral-200);
+          background: rgba(177, 198, 249, 0.15);
+          border-color: rgba(177, 198, 249, 0.5);
         }
       }
 

@@ -1,67 +1,85 @@
 /**
- * StatCard - Modern stat display with icon
- * Responsive grid layout with gradient backgrounds
+ * StatCard - Zenith Flow Glassmorphic stat display
+ * Premium dark mode with turquoise accents
  */
+
+@import "../styles/variables";
+@import "../styles/mixins";
 
 .stat-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md);
-  border-radius: 16px;
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-5);
+  border-radius: var(--radius-xl);
+  @include glass-card;
+  position: relative;
+  overflow: hidden;
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: all 0.3s ease;
-  }
-
-  // Hover effect
-  &:hover {
-    border-color: var(--color-primary);
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
-    transform: translateY(-4px);
-  }
-
-  // Variants with gradients
-  &--primary {
-    background: linear-gradient(
-      135deg,
-      rgba(37, 99, 235, 0.08),
-      rgba(124, 58, 237, 0.08)
+  // Background pattern
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 100% 0%,
+      rgba(89, 216, 229, 0.05),
+      transparent
     );
-    border-color: rgba(37, 99, 235, 0.2);
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  // Variants with turquoise tones
+  &--primary {
+    @include glass-surface-active;
+    border-color: rgba(89, 216, 229, 0.4);
 
     .stat-card__icon-wrapper {
-      background: var(--gradient-primary);
+      background: linear-gradient(135deg, #59d8e5 0%, #00a8b5 100%);
+      box-shadow: 0 0 20px rgba(89, 216, 229, 0.4);
+    }
+
+    .stat-card__value {
+      color: #59d8e5;
     }
   }
 
   &--accent {
-    background: linear-gradient(
-      135deg,
-      rgba(255, 87, 34, 0.08),
-      rgba(255, 152, 0, 0.08)
-    );
-    border-color: rgba(255, 87, 34, 0.2);
+    &:hover {
+      background: rgba(177, 198, 249, 0.1);
+      border-color: rgba(177, 198, 249, 0.3);
+    }
 
     .stat-card__icon-wrapper {
-      background: var(--gradient-accent);
+      background: linear-gradient(135deg, #b1c6f9 0%, #314671 100%);
+      box-shadow: 0 0 20px rgba(177, 198, 249, 0.3);
+    }
+
+    .stat-card__value {
+      color: #b1c6f9;
     }
   }
 
   &--success {
-    background: linear-gradient(
-      135deg,
-      rgba(22, 163, 74, 0.08),
-      rgba(34, 197, 94, 0.08)
-    );
-    border-color: rgba(22, 163, 74, 0.2);
+    &:hover {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
 
     .stat-card__icon-wrapper {
-      background: var(--gradient-success);
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .stat-card__value {
+      color: #10b981;
     }
   }
 }
@@ -70,55 +88,68 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  background: var(--gradient-primary);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #59d8e5 0%, #00a8b5 100%);
+  box-shadow: 0 0 20px rgba(89, 216, 229, 0.3);
+  transition: all var(--transition-fast);
+  position: relative;
 
-  @media (min-width: 640px) {
-    width: 64px;
-    height: 64px;
+  @include respond-to("sm") {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-xl);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: all 0.3s ease;
+  // Inner glow
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
   }
 }
 
 .stat-card__icon {
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
+  position: relative;
+  z-index: 1;
 
-  @media (min-width: 640px) {
-    font-size: 1.75rem;
+  @include respond-to("sm") {
+    font-size: 2rem;
   }
 }
 
 .stat-card__label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-text-secondary);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-on-surface-variant);
   text-align: center;
   margin: 0;
-  line-height: 1.4;
+  line-height: var(--line-height-normal);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 
-  @media (min-width: 640px) {
-    font-size: 1rem;
+  @include respond-to("sm") {
+    font-size: var(--font-size-base);
   }
 }
 
 .stat-card__value {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-family: var(--font-family-display);
+  font-size: 1.875rem;
+  font-weight: 800;
   color: var(--color-primary);
   text-align: center;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 
-  @media (min-width: 640px) {
-    font-size: 2rem;
-  }
-
-  @media (min-width: 1024px) {
+  @include respond-to("sm") {
     font-size: 2.25rem;
   }
 }
