@@ -1,32 +1,38 @@
 /**
  * TrainingForm - Modern form styling
  * Responsive inputs, validation states, and button styles
+ * Zenith Flow Dark Mode Design
  */
+
+@import "../styles/variables";
+@import "../styles/mixins";
 
 .training-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--space-4);
 }
 
 // Form group wrapper
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: var(--space-2);
 }
 
 // Form label
 .form-label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--on-surface);
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 
   .required {
-    color: var(--color-accent);
+    color: var(--color-error);
     font-weight: 700;
   }
 }
@@ -35,42 +41,51 @@
 .form-input,
 .form-select,
 .form-textarea {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid rgba(89, 216, 229, 0.2);
+  border-radius: var(--radius-md);
   font-size: 1rem;
-  font-family: inherit;
-  background: var(--color-background);
-  color: var(--color-text-primary);
+  font-family:
+    Lexend,
+    -apple-system,
+    sans-serif;
+  background: rgba(58, 123, 213, 0.08);
+  color: var(--on-surface);
   transition: all 0.2s ease;
+
+  &::placeholder {
+    color: var(--on-surface-variant);
+  }
 
   // Focus state
   &:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background: rgba(58, 123, 213, 0.12);
+    box-shadow: 0 0 0 3px rgba(89, 216, 229, 0.1);
   }
 
   // Hover state
   &:hover {
-    border-color: var(--color-primary);
+    border-color: rgba(89, 216, 229, 0.3);
   }
 
   // Disabled state
   &:disabled {
-    background: var(--color-background-secondary);
-    color: var(--color-text-secondary);
+    background: rgba(58, 123, 213, 0.04);
+    color: var(--on-surface-variant);
     cursor: not-allowed;
     opacity: 0.6;
   }
 
   // Error state
   &[aria-invalid="true"] {
-    border-color: var(--color-error, #ef4444);
-    background: rgba(239, 68, 68, 0.04);
+    border-color: rgba(255, 76, 76, 0.4);
+    background: rgba(255, 76, 76, 0.05);
 
     &:focus {
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      box-shadow: 0 0 0 3px rgba(255, 76, 76, 0.1);
+      border-color: var(--color-error);
     }
   }
 }
@@ -78,14 +93,13 @@
 .form-textarea {
   resize: vertical;
   min-height: 100px;
-  font-family: inherit;
 }
 
 // Error message
 .form-error {
   font-size: 0.75rem;
-  color: var(--color-error, #ef4444);
-  font-weight: 500;
+  color: var(--color-error);
+  font-weight: 600;
   display: block;
   animation: slideDown 0.2s ease;
 }
@@ -93,43 +107,43 @@
 // Select dropdown specific styling
 .form-select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232563eb' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2359d8e5' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right var(--spacing-md) center;
-  padding-right: var(--spacing-xl);
+  background-position: right var(--space-3) center;
+  padding-right: var(--space-6);
   cursor: pointer;
 
   option {
-    background: white;
-    color: var(--color-text-primary);
-    padding: var(--spacing-sm);
+    background: var(--surface);
+    color: var(--on-surface);
+    padding: var(--space-2);
   }
 }
 
 // Form actions
 .form-actions {
   display: flex;
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-md);
+  gap: var(--space-2);
+  margin-top: var(--space-4);
 
   @media (min-width: 640px) {
-    gap: var(--spacing-md);
+    gap: var(--space-4);
   }
 }
 
 // Button styles
 .btn {
   flex: 1;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--space-3) var(--space-6);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
+  gap: var(--space-2);
   transition: all 0.2s ease;
   min-height: 44px;
 
@@ -151,27 +165,20 @@
   }
 }
 
-// Primary button
+// Primary button with turquoise
 .btn--primary {
-  background: var(--gradient-primary);
-  color: white;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-
-  &:hover {
-    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
-    transform: translateY(-2px);
-  }
+  @include button-turquoise;
 }
 
 // Secondary button
 .btn--secondary {
-  background: var(--color-background-secondary);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
+  background: rgba(58, 123, 213, 0.1);
+  color: var(--color-secondary);
+  border: 1px solid rgba(177, 198, 249, 0.2);
 
   &:hover {
-    background: var(--color-border);
-    border-color: var(--color-text-secondary);
+    background: rgba(58, 123, 213, 0.15);
+    border-color: rgba(177, 198, 249, 0.3);
   }
 }
 
@@ -184,24 +191,5 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-// Dark mode support
-@media (prefers-color-scheme: dark) {
-  .form-input,
-  .form-select,
-  .form-textarea {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
-
-    &:hover {
-      border-color: rgba(37, 99, 235, 0.4);
-    }
-
-    &:focus {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    }
   }
 }

@@ -186,3 +186,158 @@
     max-width: min(100% - 3rem, 1024px);
   }
 }
+
+// ============================================================================
+// ZENITH FLOW - GLASSMORPHISM & PREMIUM EFFECTS
+// ============================================================================
+
+// Glassmorphic Card - Surface Level 1 (tonal layering)
+@mixin glass-card {
+  background: rgba(10, 36, 77, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(89, 216, 229, 0.1);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  @include transition(all);
+
+  &:hover {
+    background: rgba(10, 36, 77, 0.8);
+    border-color: rgba(89, 216, 229, 0.2);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Glassmorphic Surface avec glow (Active State)
+@mixin glass-surface-active {
+  background: rgba(10, 36, 77, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(89, 216, 229, 0.3);
+  box-shadow:
+    0 0 30px rgba(89, 216, 229, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.2);
+  @include transition(all);
+}
+
+// Glow Effect - Turquoise accent
+@mixin glow-primary($intensity: 0.15) {
+  box-shadow:
+    0 0 20px rgba(89, 216, 229, $intensity),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  @include transition(box-shadow);
+
+  &:hover {
+    box-shadow:
+      0 0 30px rgba(89, 216, 229, $intensity * 1.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+}
+
+// Backdrop blur pour navigation
+@mixin glass-navbar {
+  background: rgba(18, 20, 20, 0.8);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(89, 216, 229, 0.1);
+  box-shadow: 0 -2px 24px rgba(0, 0, 0, 0.2);
+}
+
+// Button Turquoise premium
+@mixin button-turquoise {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  );
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-6);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  @include transition(all);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    @include transition(opacity);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(89, 216, 229, 0.3);
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// Badge style Zenith
+@mixin badge-zenith {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: rgba(89, 216, 229, 0.15);
+  border-radius: var(--radius-full);
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border: 1px solid rgba(89, 216, 229, 0.3);
+}
+
+// Heading Styles Zenith
+@mixin heading-xl {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-4xl);
+  font-weight: 800;
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+  color: var(--color-on-surface);
+}
+
+@mixin heading-lg {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  color: var(--color-on-surface);
+}
+
+@mixin heading-md {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  color: var(--color-on-surface);
+}
+
+// Body text styles
+@mixin body-lg {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-lg);
+  font-weight: 400;
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text);
+}
+
+@mixin body-md {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+}

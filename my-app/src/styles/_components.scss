@@ -96,57 +96,62 @@
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   border-radius: var(--radius-full);
-  background: var(--color-bg-tertiary);
-  color: var(--color-text);
+  background: rgba(89, 216, 229, 0.15);
+  color: var(--on-surface);
 
   &--primary {
-    background: var(--color-primary-lighter);
-    color: var(--color-primary-dark);
+    background: rgba(89, 216, 229, 0.2);
+    color: var(--color-primary);
   }
   &--success {
-    background: var(--color-success-light);
-    color: var(--color-success);
+    background: rgba(52, 211, 153, 0.15);
+    color: #34d399;
   }
   &--warning {
-    background: var(--color-warning-light);
-    color: var(--color-warning);
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
   }
   &--danger {
-    background: var(--color-danger-light);
-    color: var(--color-danger);
+    background: rgba(255, 76, 76, 0.15);
+    color: var(--color-error);
   }
 }
 
 // Boutons
 .btn {
   @include button-base;
-  background: var(--color-bg-secondary);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
+  background: rgba(89, 216, 229, 0.1);
+  color: var(--on-surface);
+  border: 1px solid rgba(89, 216, 229, 0.2);
 
   &:hover:not(:disabled) {
-    background: var(--color-bg-tertiary);
+    background: rgba(89, 216, 229, 0.15);
+    border-color: rgba(89, 216, 229, 0.3);
   }
 
   &--primary {
-    @include button-primary;
+    @include button-turquoise;
   }
 
   &--secondary {
-    background: var(--color-bg-tertiary);
-    color: var(--color-text);
+    background: rgba(58, 123, 213, 0.1);
+    color: var(--color-secondary);
+    border: 1px solid rgba(177, 198, 249, 0.2);
 
     &:hover:not(:disabled) {
-      background: var(--color-border);
+      background: rgba(58, 123, 213, 0.15);
+      border-color: rgba(177, 198, 249, 0.3);
     }
   }
 
   &--danger {
-    background: var(--color-danger);
-    color: white;
+    background: rgba(255, 76, 76, 0.1);
+    color: var(--color-error);
+    border: 1px solid rgba(255, 76, 76, 0.2);
 
     &:hover:not(:disabled) {
-      background: darken(#dc2626, 10%);
+      background: rgba(255, 76, 76, 0.15);
+      border-color: rgba(255, 76, 76, 0.3);
     }
   }
 
@@ -195,11 +200,11 @@
     margin-bottom: var(--space-2);
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-sm);
-    color: var(--color-text);
+    color: var(--on-surface);
   }
 
   .input-error {
-    color: var(--color-danger);
+    color: var(--color-error);
     font-size: var(--font-size-xs);
     margin-top: var(--space-1);
   }
@@ -218,7 +223,7 @@
 
   .stat-label {
     font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
+    color: var(--on-surface-variant);
     margin-bottom: var(--space-2);
   }
 
@@ -253,7 +258,7 @@
     position: absolute;
     bottom: -2rem;
     font-size: var(--font-size-xs);
-    color: var(--color-text-secondary);
+    color: var(--on-surface-variant);
     white-space: nowrap;
   }
 }

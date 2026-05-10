@@ -24,8 +24,8 @@ body {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
-  color: var(--color-text);
-  background-color: var(--color-bg);
+  color: var(--on-surface);
+  background-color: var(--surface);
   @media (prefers-reduced-motion: reduce) {
     * {
       animation-duration: 0.01ms !important;
@@ -50,7 +50,7 @@ h5,
 h6 {
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
-  color: var(--color-dark);
+  color: var(--on-surface);
 }
 
 h1 {
@@ -73,7 +73,7 @@ h6 {
 }
 
 p {
-  color: var(--color-text-secondary);
+  color: var(--on-surface-variant);
   line-height: var(--line-height-relaxed);
 }
 
@@ -83,7 +83,7 @@ a {
   @include transition(color);
 
   &:hover {
-    color: var(--color-primary-dark);
+    color: var(--color-primary);
   }
 
   &:focus-visible {
@@ -103,7 +103,7 @@ ol {
 code,
 pre {
   font-family: var(--font-family-mono);
-  background-color: var(--color-bg-tertiary);
+  background-color: rgba(89, 216, 229, 0.08);
   border-radius: var(--radius-sm);
 }
 

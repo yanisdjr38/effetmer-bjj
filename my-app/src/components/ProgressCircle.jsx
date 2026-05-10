@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import "./progress-circle.scss";
 
 /**
  * Composant ProgressCircle - Cercle de progression avec SVG
@@ -42,9 +43,16 @@ function ProgressCircle({ value = 0, max = 5, size = 120, label = "" }) {
         >
           <defs>
             <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#3b82f6" />
-              <stop offset="100%" stopColor="#8b5cf6" />
+              <stop offset="0%" stopColor="#59d8e5" />
+              <stop offset="100%" stopColor="#00a8b5" />
             </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
           </defs>
           <circle
             className="circle-bg"
@@ -60,6 +68,7 @@ function ProgressCircle({ value = 0, max = 5, size = 120, label = "" }) {
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
+            filter="url(#glow)"
           />
           <text
             x="50%"
@@ -68,7 +77,8 @@ function ProgressCircle({ value = 0, max = 5, size = 120, label = "" }) {
             dy=".35em"
             fontSize={size * 0.2}
             fontWeight="bold"
-            fill="#1f2937"
+            fill="#59d8e5"
+            fontFamily="Anybody, system-ui"
           >
             {percentage}%
           </text>
