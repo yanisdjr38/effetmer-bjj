@@ -1,6 +1,7 @@
 {
-  "short_name": "Effetmer",
-  "name": "Effetmer BJJ",
+  "short_name": "EFFETMER",
+  "name": "EFFETMER - Personal BJJ Tracker",
+  "description": "Personal Brazilian Jiu-Jitsu progression tracker. Track your training journey, build consistency, and achieve your goals.",
   "icons": [
     {
       "src": "../src/assets/logo192.png",
@@ -13,8 +14,10 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/effetmer-bjj/",
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#007c91",
-  "background_color": "#ffffff"
+  "theme_color": "#59d8e5",
+  "background_color": "#121414",
+  "categories": ["sports", "lifestyle"],
+  "screenshots": []
 }
