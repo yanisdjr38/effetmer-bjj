@@ -1,0 +1,422 @@
+@import "../styles/variables";
+
+.analyticsPage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-5);
+  padding-bottom: 5rem; // Safe zone for bottom nav
+}
+
+// ============================================================================
+// HEADER
+// ============================================================================
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+
+  .headerContent {
+    flex: 1;
+
+    h1 {
+      font: var(--font-weight-bold) 2rem var(--font-family-display);
+      color: var(--color-on-surface);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    p {
+      font: var(--font-weight-normal) 0.875rem var(--font-family-body);
+      color: var(--color-on-surface-variant);
+      margin: var(--space-2) 0 0 0;
+    }
+  }
+}
+
+// ============================================================================
+// METRICS GRID
+// ============================================================================
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.metricCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-radius: 1rem;
+  background: var(--color-surface-container-high);
+  border: 1px solid var(--color-outline);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 20px rgba(89, 216, 229, 0.15);
+  }
+
+  .metricIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: rgba(89, 216, 229, 0.1);
+    flex-shrink: 0;
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--color-primary);
+    }
+  }
+
+  .metricContent {
+    flex: 1;
+
+    h3 {
+      font: var(--font-weight-semibold) 0.75rem var(--font-family-body);
+      color: var(--color-on-surface-variant);
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metricValue {
+      font: var(--font-weight-bold) 1.75rem var(--font-family-display);
+      color: var(--color-primary);
+      margin: var(--space-1) 0;
+      line-height: 1;
+    }
+
+    .metricLabel {
+      font: var(--font-weight-normal) 0.75rem var(--font-family-body);
+      color: var(--color-on-surface-variant);
+    }
+  }
+}
+
+// ============================================================================
+// CHARTS SECTION
+// ============================================================================
+
+.chartsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.chartRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+
+  &:has(.chartHalf) {
+    grid-template-columns: repeat(2, 1fr);
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.chartContainer {
+  padding: var(--space-5);
+  border-radius: 1rem;
+  background: var(--color-surface-container-high);
+  border: 1px solid var(--color-outline);
+  backdrop-filter: blur(8px);
+
+  .chartLabel {
+    font: var(--font-weight-bold) 1rem var(--font-family-display);
+    color: var(--color-on-surface);
+    margin: 0 0 var(--space-4) 0;
+  }
+
+  .chart {
+    width: 100%;
+    height: auto;
+    min-height: 250px;
+  }
+
+  .emptyChart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    color: var(--color-on-surface-variant);
+    font-size: 0.875rem;
+  }
+}
+
+.chartHalf {
+  @media (max-width: 768px) {
+    grid-column: 1 / -1;
+  }
+}
+
+.pieChart {
+  width: 100%;
+  height: auto;
+  min-height: 250px;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-outline);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.875rem;
+  color: var(--color-on-surface-variant);
+
+  .legendColor {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+}
+
+// ============================================================================
+// WEEKLY INTENSITY
+// ============================================================================
+
+.weeklyIntensity {
+  padding: var(--space-5);
+  border-radius: 1rem;
+  background: var(--color-surface-container-high);
+  border: 1px solid var(--color-outline);
+  backdrop-filter: blur(8px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    font: var(--font-weight-bold) 1rem var(--font-family-display);
+    color: var(--color-on-surface);
+    margin: 0 0 var(--space-4) 0;
+  }
+
+  .intensityBar {
+    width: 100%;
+    height: 12px;
+    background: var(--color-surface-container);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: var(--space-3);
+
+    .intensityFill {
+      height: 100%;
+      background: var(--gradient-primary);
+      border-radius: 999px;
+      transition: width 0.6s ease;
+    }
+  }
+
+  p {
+    margin: var(--space-1) 0;
+    font-size: 0.875rem;
+    color: var(--color-on-surface-variant);
+
+    &:first-of-type {
+      font: var(--font-weight-semibold) 0.875rem var(--font-family-body);
+      color: var(--color-primary);
+    }
+  }
+
+  .intensityNote {
+    margin-top: auto;
+    font-size: 0.75rem;
+    color: var(--color-on-surface-variant);
+    line-height: 1.4;
+  }
+}
+
+// ============================================================================
+// HEATMAP
+// ============================================================================
+
+.heatmapContainer {
+  padding: var(--space-5);
+  border-radius: 1rem;
+  background: var(--color-surface-container-high);
+  border: 1px solid var(--color-outline);
+  backdrop-filter: blur(8px);
+
+  h3 {
+    font: var(--font-weight-bold) 1rem var(--font-family-display);
+    color: var(--color-on-surface);
+    margin: 0 0 var(--space-4) 0;
+  }
+
+  .heatmap {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4px;
+    justify-items: center;
+  }
+}
+
+.heatmapCell {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(89, 216, 229, 0.2);
+
+  &:hover {
+    transform: scale(1.15);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 12px rgba(89, 216, 229, 0.4);
+  }
+}
+
+// ============================================================================
+// TOP PARTNERS
+// ============================================================================
+
+.topPartnersSection {
+  margin-top: var(--space-8);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-5);
+
+  h2 {
+    font: var(--font-weight-bold) 1.5rem var(--font-family-display);
+    color: var(--color-on-surface);
+    margin: 0;
+  }
+
+  .viewAll {
+    color: var(--color-primary);
+    text-decoration: none;
+    font: var(--font-weight-semibold) 0.875rem var(--font-family-body);
+    transition: all 0.2s ease;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.partnersList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.partnerCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-radius: 0.75rem;
+  background: var(--color-surface-container-high);
+  border: 1px solid var(--color-outline);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+    background: var(--color-surface-container-highest);
+  }
+
+  .partnerAvatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    color: var(--color-on-primary);
+    font: var(--font-weight-bold) 1.125rem var(--font-family-display);
+    flex-shrink: 0;
+  }
+
+  .partnerInfo {
+    flex: 1;
+
+    h4 {
+      font: var(--font-weight-semibold) 1rem var(--font-family-body);
+      color: var(--color-on-surface);
+      margin: 0;
+    }
+
+    .beltBadge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font: var(--font-weight-semibold) 0.65rem var(--font-family-body);
+      margin-top: var(--space-1);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .partnerStats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-1);
+
+    .roundsCount {
+      font: var(--font-weight-bold) 1.25rem var(--font-family-display);
+      color: var(--color-primary);
+    }
+
+    .roundsLabel {
+      font: var(--font-weight-normal) 0.75rem var(--font-family-body);
+      color: var(--color-on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+  }
+}
+
+// ============================================================================
+// RESPONSIVE
+// ============================================================================
+
+@media (max-width: 640px) {
+  .analyticsPage {
+    padding: var(--space-4);
+    gap: var(--space-6);
+  }
+
+  .metricsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+}

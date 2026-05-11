@@ -1,136 +1,277 @@
-import {
-  faBook,
-  faCalendarAlt,
-  faClock,
-  faDumbbell,
-  faHistory,
-} from "@fortawesome/free-solid-svg-icons";
 import { useMemo } from "react";
-import logo from "../assets/logo.png";
-import ProgressCircle from "../components/ProgressCircle.jsx";
-import StatCard from "../components/StatCard.jsx";
-import { useLocalStorage } from "../hooks/useLocalStorage.jsx";
+import { Link } from "react-router-dom";
+import { useApp } from "../context/AppContext.jsx";
 import styles from "./HomePage.module.scss";
 
 /**
- * HomePage - Home page with training statistics overview
- * Displays weekly progress, session count, total time, techniques learned
+ * HomePage - Personal dashboard with streaks, next session, and key metrics
+ * Displays current streak, next scheduled session, last training, and performance metrics
  */
 function HomePage() {
-  const [trainingSessions] = useLocalStorage("trainingSessions", []);
-  const [techniques] = useLocalStorage("techniques", []);
+  const {
+    stats,
+    achievements,
+    userProfile,
+    trainingSessions,
+    trainingSchedule,
+  } = useApp();
 
-  // Optimized statistics calculation with memoization
-  const stats = useMemo(() => {
-    const now = new Date();
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - now.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
+  // Calculate streak percentage
+  const streakPercentage = Math.min((achievements.streak / 7) * 100, 100);
 
-    const thisWeek = trainingSessions.filter((session) => {
-      const sessionDate = new Date(session.date);
-      return sessionDate >= startOfWeek;
-    });
+  // Calculate next scheduled session from recurring schedule
+  const nextSession = useMemo(() => {
+    if (trainingSchedule.sessions.length === 0) {
+      // Fallback if no schedule configured
+      return {
+        time: "À configurer",
+        location: userProfile.academy || "Academy",
+        address: "-- Configurer votre horaire --",
+        type: "Non planifié",
+        daysUntil: null,
+      };
+    }
 
-    const totalDuration = trainingSessions.reduce(
-      (sum, s) => sum + Number(s.duration || 0),
-      0,
-    );
+    const daysOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const today = new Date();
+    let nextSessionFound = null;
+    let daysAhead = 0;
 
-    const lastSession =
-      trainingSessions.length > 0
-        ? trainingSessions[trainingSessions.length - 1].date
-        : null;
+    // Check sessions for this week and next
+    for (let i = 0; i < 14; i++) {
+      const checkDate = new Date(today);
+      checkDate.setDate(today.getDate() + i);
+      const dayName = daysOfWeek[checkDate.getDay()];
+
+      const sessionsForDay = trainingSchedule.sessions.filter(
+        (s) => s.day === dayName && s.enabled,
+      );
+
+      if (sessionsForDay.length > 0) {
+        nextSessionFound = sessionsForDay[0];
+        daysAhead = i;
+        break;
+      }
+    }
+
+    if (!nextSessionFound) {
+      return {
+        time: "Pas de session prévue",
+        location: userProfile.academy || "Academy",
+        address: "Configurez votre horaire",
+        type: "Non planifié",
+        daysUntil: null,
+      };
+    }
 
     return {
-      total: trainingSessions.length,
-      thisWeek: thisWeek.length,
-      totalDuration: Math.round(totalDuration),
-      totalHours: Math.round(totalDuration / 60),
-      lastDate: lastSession,
-      techniqueCount: techniques.length,
+      time: nextSessionFound.startTime,
+      location: userProfile.academy || "Academy HQ",
+      address:
+        nextSessionFound.notes || "-- Ajouter de détails à votre horaire --",
+      type: nextSessionFound.trainingType,
+      daysUntil: daysAhead,
+      endTime: nextSessionFound.endTime,
     };
-  }, [trainingSessions, techniques]);
+  }, [trainingSchedule, userProfile.academy]);
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "Aucun";
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString("fr-FR", {
-        weekday: "short",
-        year: "numeric",
+  // Get last training session details
+  const lastTraining = useMemo(() => {
+    if (trainingSessions.length === 0) return null;
+    const last = trainingSessions[trainingSessions.length - 1];
+    const date = new Date(last.date);
+    return {
+      ...last,
+      dateStr: date.toLocaleDateString("fr-FR", {
         month: "short",
         day: "numeric",
-      });
-    } catch {
-      return "Date invalide";
-    }
-  };
+      }),
+      typeLabel:
+        {
+          techniques: "Technique",
+          drill: "Drill",
+          sparring: "Sparring",
+          openmat: "Open Mat",
+          muscu: "Musculation",
+          cardio: "Cardio",
+          competition: "Compétition",
+        }[last.type] || "Entraînement",
+    };
+  }, [trainingSessions]);
 
-  const WEEKLY_GOAL = 5;
+  // Format day display
+  const getDayDisplay = () => {
+    if (nextSession.daysUntil === null) return "";
+    if (nextSession.daysUntil === 0) return "Aujourd'hui";
+    if (nextSession.daysUntil === 1) return "Demain";
+    return `Dans ${nextSession.daysUntil} jours`;
+  };
 
   return (
     <section className={styles.homepage} role="main">
-      {/* Hero header with welcome message */}
-      <div className={styles.homepage__header}>
-        <div className={styles.homepage__hero}>
-          <img src={logo} alt="EffetMer BJJ Logo" loading="lazy" />
-          <div className={styles.homepage__hero_text}>
-            <h1>Bienvenue</h1>
-            <p>Suivi de progression BJJ</p>
+      {/* Top Navigation for Home Page */}
+      <div className={styles.homeHeader}>
+        <div className={styles.headerTitleBox}>
+          <h1>EFFETMER</h1>
+        </div>
+        <button className={styles.notificationBell} aria-label="Notifications">
+          🔔
+        </button>
+      </div>
+
+      {/* Current Streak Section */}
+      <div className={styles.streakSection}>
+        <div className={styles.streakContent}>
+          <div className={styles.streakIcon}>🔥</div>
+          <div className={styles.streakInfo}>
+            <h2>
+              {achievements.streak}{" "}
+              <span className={styles.streakLabel}>Jours</span>
+            </h2>
+            <p className={styles.streakMotivation}>Continuez comme ça!</p>
+            <div className={styles.streakProgress}>
+              {[...Array(userProfile.weeklyGoal || 5)].map((_, i) => (
+                <span
+                  key={i}
+                  className={`${styles.streakDot} ${
+                    i < achievements.streak ? styles.active : ""
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className={styles.streakMeta}>
+          <span className={styles.streakNote}>
+            {Math.max(0, (userProfile.weeklyGoal || 5) - achievements.streak)}{" "}
+            plus pour cette semaine
+          </span>
+        </div>
+      </div>
+
+      {/* Next Session Card */}
+      {trainingSchedule.sessions.length > 0 ? (
+        <div className={styles.nextSessionCard}>
+          <div className={styles.sessionHeader}>
+            <span className={styles.sessionLabel}>PROCHAINE SESSION</span>
+            <span className={styles.sessionCountdown}>{getDayDisplay()}</span>
+          </div>
+
+          <div className={styles.sessionTime}>
+            <span className={styles.timeValue}>{nextSession.time}</span>
+            <span className={styles.sessionType}>
+              {nextSession.type || "Entraînement"}
+            </span>
+          </div>
+
+          <div className={styles.sessionDetails}>
+            <div className={styles.sessionDetail}>
+              <span className={styles.detailLabel}>Lieu</span>
+              <span className={styles.detailValue}>{nextSession.location}</span>
+            </div>
+            <div className={styles.sessionDetail}>
+              <span className={styles.detailLabel}>Détails</span>
+              <span className={styles.detailValue}>{nextSession.address}</span>
+            </div>
+          </div>
+
+          <Link to="/settings" className={styles.navigateBtn}>
+            GÉRER HORAIRE →
+          </Link>
+        </div>
+      ) : (
+        <div className={`${styles.nextSessionCard} ${styles.empty}`}>
+          <p>📅 Configurez votre horaire d'entraînement dans les paramètres</p>
+          <Link to="/settings" className={styles.navigateBtn}>
+            CONFIGURER MAINTENANT
+          </Link>
+        </div>
+      )}
+
+      {/* Last Training Section */}
+      {lastTraining && (
+        <div className={styles.lastTrainingSection}>
+          <h3>Dernier entraînement</h3>
+          <div className={styles.lastTrainingCard}>
+            <div className={styles.trainingHeader}>
+              <span className={styles.trainingType}>
+                {lastTraining.typeLabel}
+              </span>
+              <span className={styles.trainingDuration}>
+                {lastTraining.duration}m
+              </span>
+            </div>
+            <div className={styles.trainingDate}>{lastTraining.dateStr}</div>
+            {lastTraining.note && (
+              <p className={styles.trainingNote}>{lastTraining.note}</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Key Metrics Grid */}
+      <div className={styles.metricsSection}>
+        <h3>Aperçu de performance</h3>
+        <div className={styles.metricsGrid}>
+          <div className={styles.metricBox}>
+            <div className={styles.metricIcon}>⏱️</div>
+            <div className={styles.metricContent}>
+              <span className={styles.metricLabel}>Volume d'entraînement</span>
+              <span className={styles.metricValue}>{stats.monthlyHours}h</span>
+              <span className={styles.metricNote}>Ce mois</span>
+            </div>
+          </div>
+
+          <div className={styles.metricBox}>
+            <div className={styles.metricIcon}>💪</div>
+            <div className={styles.metricContent}>
+              <span className={styles.metricLabel}>Sessions</span>
+              <span className={styles.metricValue}>{stats.thisMonth}</span>
+              <span className={styles.metricNote}>Ce mois</span>
+            </div>
+          </div>
+
+          <div className={styles.metricBox}>
+            <div className={styles.metricIcon}>🏆</div>
+            <div className={styles.metricContent}>
+              <span className={styles.metricLabel}>Accomplissements</span>
+              <span className={styles.metricValue}>
+                {achievements.badges.length}
+              </span>
+              <span className={styles.metricNote}>Débloqués</span>
+            </div>
+          </div>
+
+          <div className={styles.metricBox}>
+            <div className={styles.metricIcon}>📚</div>
+            <div className={styles.metricContent}>
+              <span className={styles.metricLabel}>Techniques</span>
+              <span className={styles.metricValue}>{stats.techniqueCount}</span>
+              <span className={styles.metricNote}>Apprises</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Weekly progress circle */}
-      <div className={styles.homepage__progress}>
-        <ProgressCircle
-          value={Math.min(stats.thisWeek, WEEKLY_GOAL)}
-          max={WEEKLY_GOAL}
-          size={140}
-          label="Objectif hebdomadaire"
-        />
-      </div>
-
-      {/* Main statistics with gradient cards */}
-      <div className={styles.homepage__stats_row}>
-        <StatCard
-          icon={faCalendarAlt}
-          label="Cette semaine"
-          value={stats.thisWeek}
-          variant="primary"
-        />
-        <StatCard
-          icon={faDumbbell}
-          label="Au total"
-          value={stats.total}
-          variant="accent"
-        />
-      </div>
-
-      <div className={styles.homepage__stats_row}>
-        <StatCard
-          icon={faClock}
-          label="Temps"
-          value={`${stats.totalHours}h`}
-          variant="success"
-        />
-        <StatCard
-          icon={faBook}
-          label="Techniques"
-          value={stats.techniqueCount}
-          variant="primary"
-        />
-      </div>
-
-      {/* Last training session */}
-      <div className={styles.homepage__last_session}>
-        <StatCard
-          icon={faHistory}
-          label="Dernier entraînement"
-          value={formatDate(stats.lastDate)}
-          variant="accent"
-        />
+      {/* Quick Actions */}
+      <div className={styles.quickActionsSection}>
+        <Link to="/training" className={styles.actionButton}>
+          💪 Enregistrer l'entraînement
+        </Link>
+        <Link to="/timer" className={styles.actionButton}>
+          ⏱️ Démarrer Timer
+        </Link>
+        <Link to="/analytics" className={styles.actionButton}>
+          📊 Voir Analytics
+        </Link>
       </div>
     </section>
   );
