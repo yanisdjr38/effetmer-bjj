@@ -1,9 +1,9 @@
 const isLocalhost = Boolean(
   window.location.hostname === "localhost" ||
-    window.location.hostname === "[::1]" ||
-    window.location.hostname.match(
-      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-    )
+  window.location.hostname === "[::1]" ||
+  window.location.hostname.match(
+    /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/,
+  ),
 );
 
 export function register(config) {
@@ -13,7 +13,7 @@ export function register(config) {
     if (isLocalhost) {
       checkValidServiceWorker(swUrl, config);
       navigator.serviceWorker.ready.then(() =>
-        console.log("PWA prête en local.")
+        console.log("PWA prête en local."),
       );
     } else {
       registerValidSW(swUrl, config);
@@ -36,26 +36,35 @@ function registerValidSW(swUrl, config) {
 function checkValidServiceWorker(swUrl, config) {
   fetch(swUrl)
     .then((response) => {
-      const isHtml = response.headers
-        .get("content-type")
-        ?.includes("javascript");
-      if (response.status === 404 || !isHtml) {
+      // Check if service worker file is valid JavaScript
+      const contentType = response.headers.get("content-type") || "";
+      const isValidServiceWorker =
+        response.status === 200 &&
+        (contentType.includes("javascript") ||
+          contentType.includes("text/plain"));
+
+      if (response.status === 404 || !isValidServiceWorker) {
         navigator.serviceWorker.ready.then((registration) =>
-          registration.unregister().then(() => window.location.reload())
+          registration.unregister().then(() => {
+            console.warn(
+              "Service Worker invalide. Désactivation et rechargement.",
+            );
+            window.location.reload();
+          }),
         );
       } else {
         registerValidSW(swUrl, config);
       }
     })
-    .catch(() =>
-      console.log("Pas de connexion. PWA utilisable en mode hors ligne.")
-    );
+    .catch(() => {
+      console.log("Pas de connexion. PWA utilisable en mode hors ligne.");
+    });
 }
 
 export function unregister() {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.ready.then((registration) =>
-      registration.unregister()
+      registration.unregister(),
     );
   }
 }

@@ -18,6 +18,38 @@
   "display": "standalone",
   "theme_color": "#59d8e5",
   "background_color": "#121414",
-  "categories": ["sports", "lifestyle"],
-  "screenshots": []
+  "categories": ["sports"],
+  "scope": "/",
+  "screenshots": [
+    {
+      "src": "/screenshot-narrow.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "purpose": "any"
+    },
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add Training Session",
+      "short_name": "Add Session",
+      "description": "Quickly add a new training session",
+      "url": "/training?action=new",
+      "icons": [
+        {
+          "src": "../src/assets/logo192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "orientation": "portrait-primary"
 }

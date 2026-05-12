@@ -163,7 +163,7 @@ const TrainingScheduleManager = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="startTime">Start Time</label>
+              <label htmlFor="startTime">Heure de début</label>
               <input
                 id="startTime"
                 type="time"
@@ -174,7 +174,7 @@ const TrainingScheduleManager = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="endTime">End Time</label>
+              <label htmlFor="endTime">Heure de fin</label>
               <input
                 id="endTime"
                 type="time"
@@ -186,13 +186,13 @@ const TrainingScheduleManager = () => {
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="notes">Notes (optional)</label>
+            <label htmlFor="notes">Notes (optionnel)</label>
             <textarea
               id="notes"
               name="notes"
               value={formData.notes}
               onChange={handleInputChange}
-              placeholder="e.g., Bring rashguard, bring water"
+              placeholder="p.ex., Apporter le rashguard, apporter de l'eau"
               rows="3"
             />
           </div>
@@ -205,7 +205,7 @@ const TrainingScheduleManager = () => {
               checked={formData.enabled}
               onChange={handleInputChange}
             />
-            <label htmlFor="enabled">Active session</label>
+            <label htmlFor="enabled">Session active</label>
           </div>
 
           <div className={styles.formActions}>
@@ -213,7 +213,7 @@ const TrainingScheduleManager = () => {
               className={`${styles.btn} ${styles.primary}`}
               onClick={handleSaveSession}
             >
-              {editingId ? "Update Session" : "Add Session"}
+              {editingId ? "Mettre à jour" : "Ajouter une séance"}
             </button>
             <button
               className={`${styles.btn} ${styles.secondary}`}
@@ -222,7 +222,7 @@ const TrainingScheduleManager = () => {
                 resetForm();
               }}
             >
-              Cancel
+              Annuler
             </button>
           </div>
         </div>
@@ -234,7 +234,7 @@ const TrainingScheduleManager = () => {
           className={`${styles.btn} ${styles.addBtn}`}
           onClick={() => setIsAddingNew(true)}
         >
-          + Add Training Session
+          + Ajouter une séance
         </button>
       )}
 
@@ -245,7 +245,7 @@ const TrainingScheduleManager = () => {
             <h3 className={styles.dayTitle}>{day}</h3>
 
             {sessionsByDay[day].length === 0 ? (
-              <p className={styles.noSession}>Rest day</p>
+              <p className={styles.noSession}>Jour de repos</p>
             ) : (
               <div className={styles.sessions}>
                 {sessionsByDay[day].map((session) => (
@@ -296,15 +296,15 @@ const TrainingScheduleManager = () => {
       {/* Summary */}
       {trainingSchedule.sessions.length > 0 && (
         <div className={styles.summary}>
-          <h3>Summary</h3>
+          <h3>Résumé</h3>
           <p>
             <strong>
               {trainingSchedule.sessions.filter((s) => s.enabled).length}
             </strong>{" "}
-            active sessions per week
+            séances actives par semaine
           </p>
           <p>
-            <strong>Most common type:</strong>{" "}
+            <strong>Type le plus courant:</strong>{" "}
             {trainingSchedule.sessions.length > 0
               ? trainingTypes.find(
                   (t) =>

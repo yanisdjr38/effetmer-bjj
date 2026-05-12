@@ -19,11 +19,11 @@ function ChallengesPage() {
   });
 
   const goalCategories = [
-    { value: "sessions", label: "📅 Training Sessions", icon: "📅" },
+    { value: "sessions", label: "📅 Séances d'entraînement", icon: "📅" },
     { value: "techniques", label: "📚 Techniques", icon: "📚" },
-    { value: "duration", label: "⏱️ Duration", icon: "⏱️" },
-    { value: "submission", label: "🔗 Submissions", icon: "🔗" },
-    { value: "other", label: "🎯 Other", icon: "🎯" },
+    { value: "duration", label: "⏱️ Durée", icon: "⏱️" },
+    { value: "submission", label: "🔗 Soumissions", icon: "🔗" },
+    { value: "other", label: "🎯 Autre", icon: "🎯" },
   ];
 
   // Handle add new goal
@@ -48,7 +48,7 @@ function ChallengesPage() {
   // Handle complete goal
   const handleCompleteGoal = useCallback(
     (goalId) => {
-      if (window.confirm("Mark this goal as completed?")) {
+      if (window.confirm("Marquer cet objectif comme complété ?")) {
         completeGoal(goalId);
       }
     },

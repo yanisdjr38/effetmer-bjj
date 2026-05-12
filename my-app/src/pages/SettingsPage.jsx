@@ -156,17 +156,7 @@ function SettingsPage() {
               />
               <span>Accomplissement débloqué</span>
             </label>
-            <label
-              className={styles.checkboxItem}
-              style={{ opacity: settings.notifications ? 1 : 0.5 }}
-            >
-              <input
-                type="checkbox"
-                defaultChecked
-                disabled={!settings.notifications}
-              />
-              <span>Activité d'amis</span>
-            </label>
+            {/* 'Activité d'amis' removed — local app, no community features */}
             <label
               className={styles.checkboxItem}
               style={{ opacity: settings.notifications ? 1 : 0.5 }}
@@ -181,50 +171,21 @@ function SettingsPage() {
       {/* Training Schedule Manager */}
       <TrainingScheduleManager />
 
-      {/* Data & Sync Section */}
+      {/* Offline-First Notice */}
       <div className={styles.settingsSection}>
-        <h2>🔄 Données et synchro</h2>
-
+        <h2>🔌 Mode local</h2>
         <div className={styles.settingGroup}>
-          <div className={styles.settingItem}>
-            <div className={styles.settingLabel}>
-              <label htmlFor="autosync-toggle">Synchro automatique</label>
-              <p className={styles.settingDescription}>
-                Synchroniser automatiquement vos données vers le stockage en
-                nuage
-              </p>
-            </div>
-            <div className={styles.settingControl}>
-              <button
-                className={`${styles.toggleButton} ${settings.autoSync ? styles.active : ""}`}
-                onClick={() => handleToggle("autoSync")}
-                aria-label="Toggle auto sync"
-              >
-                {settings.autoSync ? "●" : "○"}
-              </button>
-            </div>
-          </div>
-
-          <div className={styles.syncStatus}>
-            <div className={styles.syncStatusItem}>
-              <span className={styles.syncIcon}>☁️</span>
-              <div>
-                <p className={styles.syncLabel}>Dernière synchro</p>
-                <p className={styles.syncTime}>
-                  {settings.syncedAt
-                    ? new Date(settings.syncedAt).toLocaleString()
-                    : "Never"}
-                </p>
-              </div>
-            </div>
-            <button className={styles.syncButton}>Synchro maintenant</button>
-          </div>
+          <p className={styles.settingDescription}>
+            EFFETMER fonctionne entièrement localement sur votre appareil.
+            Aucune donnée n'est envoyée à des serveurs externes. Vos données
+            d'entraînement restent privées et sous votre contrôle.
+          </p>
         </div>
       </div>
 
       {/* Backup & Restore Section */}
       <div className={styles.settingsSection}>
-        <h2>� Sauvegarde et restauration</h2>
+        <h2>💾 Sauvegarde et restauration</h2>
 
         <div className={styles.settingGroup}>
           <div className={styles.backupActions}>

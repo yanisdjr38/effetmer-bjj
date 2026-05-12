@@ -5,8 +5,8 @@ import { useLocalStorage } from "../hooks/useLocalStorage.jsx";
 import styles from "./TimerPage.module.scss";
 
 const DEFAULT_PROGRAMS = [
-  { id: 1, name: "Sparring", work: 300, rest: 60, rounds: 5 },
-  { id: 2, name: "Drill", work: 180, rest: 30, rounds: 4 },
+  { id: 1, name: "Combat libre", work: 300, rest: 60, rounds: 5 },
+  { id: 2, name: "Exercice", work: 180, rest: 30, rounds: 4 },
 ];
 
 /**

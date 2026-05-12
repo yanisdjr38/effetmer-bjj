@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useApp } from "../context/AppContext";
+import { usePageTitle } from "../hooks/usePageTitle.js";
 import styles from "./ProfilePage.module.scss";
 
 /**
@@ -85,6 +86,7 @@ function BeltProgress({ currentBelt, beltHistory }) {
  * ProfilePage - User profile, achievements, and statistics
  */
 function ProfilePage() {
+  usePageTitle("Profil");
   const {
     userProfile,
     updateUserProfile,
@@ -92,6 +94,16 @@ function ProfilePage() {
     achievements,
     BADGE_DEFINITIONS,
   } = useApp();
+  // Defensive: derive a display name and avatar initial to avoid runtime
+  // errors when older data schemas or defaults don't include `name`.
+  const displayName = `${userProfile?.firstName || ""} ${
+    userProfile?.lastName || ""
+  }`.trim();
+  const avatarInitial = displayName
+    ? displayName.charAt(0).toUpperCase()
+    : userProfile?.firstName
+      ? String(userProfile.firstName).charAt(0).toUpperCase()
+      : "?";
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [editForm, setEditForm] = useState({
     firstName: userProfile.firstName,
@@ -134,7 +146,7 @@ function ProfilePage() {
             className={styles.profileAvatar}
             style={{ backgroundColor: beltColor }}
           >
-            {userProfile.name.substring(0, 1)}
+            {avatarInitial}
           </div>
         </div>
 
@@ -318,86 +330,6 @@ function ProfilePage() {
             {Object.values(BADGE_DEFINITIONS).map((badge) => (
               <Badge key={badge.id} badge={badge} earned={badge.earned} />
             ))}
-          </div>
-        </div>
-
-        {/* Mastery Section */}
-        <div className={styles.masterySection}>
-          <h3>Réalisations de maîtrise</h3>
-          <div className={styles.masteryGrid}>
-            <div className={styles.masteryCard}>
-              <div className={styles.masteryIcon}>🛡️</div>
-              <h4>Roi de la garde</h4>
-              <p>Effectuez 50 balayages réussis depuis la garde fermée.</p>
-              <div className={styles.masteryProgress}>
-                <span>Progression: 27/50</span>
-              </div>
-            </div>
-
-            <div className={styles.masteryCard}>
-              <div className={styles.masteryIcon}>🏆</div>
-              <h4>Spécialiste de soumission</h4>
-              <p>Terminez 10 adversaires avec différentes étranglements.</p>
-              <div className={styles.masteryProgress}>
-                <span>Progression: 7/10</span>
-              </div>
-            </div>
-
-            <div className={styles.masteryCard}>
-              <div className={styles.masteryIcon}>💪</div>
-              <h4>Puissance maison</h4>
-              <p>Complétez 10 sessions de force en un mois.</p>
-              <div className={styles.masteryProgress}>
-                <span>Progression: 0/10 (Mensuel)</span>
-              </div>
-            </div>
-
-            <div className={styles.masteryCard}>
-              <div className={styles.masteryIcon}>⏱️</div>
-              <h4>Heures supplémentaires</h4>
-              <p>Passez 500 heures sur le tapis en un seul an.</p>
-              <div className={styles.masteryProgress}>
-                <span>Progression: {stats.totalHours}/500</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Consistency Section */}
-        <div className={styles.consistencySection}>
-          <h3>Badges de cohérence</h3>
-          <div className={styles.consistencyGrid}>
-            <div className={styles.consistencyCard}>
-              <div className={styles.consistencyIcon}>🔥</div>
-              <h4>Encendido</h4>
-              <p>Assister aux cours pendant 30 jours consécutifs.</p>
-            </div>
-
-            <div className={styles.consistencyCard}>
-              <div className={styles.consistencyIcon}>⭐</div>
-              <h4>Vétéran</h4>
-              <p>Maintenez une série d'entraînement pendant 6 mois.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Social Section */}
-      <div className={styles.socialSection}>
-        <h3>Prouesses sociales</h3>
-        <div className={styles.socialGrid}>
-          <div className={styles.socialCard}>
-            <div className={styles.socialIcon}>👥</div>
-            <h4>Joueur d'équipe</h4>
-            <p>
-              Aidez 5 nouveaux ceintures blanches avec leur première foreuse.
-            </p>
-          </div>
-
-          <div className={styles.socialCard}>
-            <div className={styles.socialIcon}>🤝</div>
-            <h4>Ambassadeur</h4>
-            <p>Présentez 3 amis pour rejoindre l'académie.</p>
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import TrainingForm from "../components/TrainingForm.jsx";
 import { useLocalStorage } from "../hooks/useLocalStorage.jsx";
+import { usePageTitle } from "../hooks/usePageTitle.js";
 import styles from "./TrainingPage.module.scss";
 
 const TRAINING_TYPES = {
@@ -24,6 +25,7 @@ const TRAINING_TYPES = {
  * TrainingPage - Gestion et visualisation des entraînements
  */
 function TrainingPage() {
+  usePageTitle("Entraînement");
   const [sessions, setSessions] = useLocalStorage("trainingSessions", []);
   const [editingSession, setEditingSession] = useState(null);
   const [filters, setFilters] = useState({ date: "", type: "" });
