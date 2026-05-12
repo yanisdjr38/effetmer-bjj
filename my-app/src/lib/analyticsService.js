@@ -197,3 +197,100 @@ export const getHeatmapData = (trainingSessions = []) => {
 
   return sessionsByDate;
 };
+
+/**
+ * Calculate real weekly intensity as a percentage
+ * Based on: sessions count, duration, and weekly goal completion
+ * For new users with no sessions, returns 0% (no fake defaults)
+ *
+ * @param {Array} trainingSessions - All training sessions
+ * @param {number} weeklyGoal - Target sessions per week (default 4)
+ * @param {Object} options - {weekStart, weekEnd} for testing
+ * @returns {Object} - {intensity: 0-100, label: "string", detail: "string"}
+ */
+export const calculateWeeklyIntensity = (
+  trainingSessions = [],
+  weeklyGoal = 4,
+  options = {},
+) => {
+  if (!Array.isArray(trainingSessions)) trainingSessions = [];
+
+  const now = options.now || new Date();
+  const weekStart = options.weekStart || getStartOfWeek(now);
+  const weekEnd = options.weekEnd || new Date(now);
+  weekEnd.setUTCDate(weekEnd.getUTCDate() + 6);
+
+  // Get sessions from this week
+  const thisWeek = filterSessionsByDateRange(
+    trainingSessions,
+    weekStart,
+    weekEnd,
+  );
+
+  // No sessions = no intensity (not fake 88%)
+  if (thisWeek.length === 0) {
+    return {
+      intensity: 0,
+      label: "Aucune donnée",
+      detail: "Commençons par une première session! 🥋",
+      sessionsThisWeek: 0,
+      daysActive: 0,
+      goalCompletion: 0,
+    };
+  }
+
+  // Calculate metrics
+  const sessionsThisWeek = thisWeek.length;
+  const totalDurationMinutes = thisWeek.reduce(
+    (sum, s) => sum + Number(s.duration || 0),
+    0,
+  );
+  const totalDurationHours = totalDurationMinutes / 60;
+
+  // Count unique days with training
+  const daysActive = new Set(thisWeek.map((s) => s.date.split("T")[0])).size;
+
+  // Goal completion rate (sessions vs goal)
+  const goalCompletion = Math.round((sessionsThisWeek / weeklyGoal) * 100);
+
+  // Intensity calculation:
+  // - Base: sessions relative to goal (0-50%)
+  // - Bonus: consistency (days active) (0-30%)
+  // - Bonus: duration (0-20%)
+  const sessionPercent = Math.min((sessionsThisWeek / weeklyGoal) * 50, 50);
+  const consistencyPercent = Math.min((daysActive / 7) * 30, 30);
+  const durationPercent = Math.min((totalDurationHours / 3) * 20, 20); // 3 hours target for week
+
+  const intensity = Math.round(
+    sessionPercent + consistencyPercent + durationPercent,
+  );
+
+  // Determine intensity label based on actual achieved intensity
+  let label = "Léger";
+  if (intensity >= 75) label = "Élite";
+  else if (intensity >= 60) label = "Avancé";
+  else if (intensity >= 45) label = "Intermédiaire";
+  else if (intensity >= 25) label = "Régulier";
+
+  // Generate contextual message
+  let detail = "";
+  if (goalCompletion >= 100) {
+    detail = `Objectif atteint! ${sessionsThisWeek} sessions cette semaine 🔥`;
+  } else if (goalCompletion >= 75) {
+    detail = `Excellent! ${sessionsThisWeek}/${weeklyGoal} sessions complétées`;
+  } else if (goalCompletion >= 50) {
+    detail = `Bonne progression: ${sessionsThisWeek}/${weeklyGoal} sessions`;
+  } else {
+    detail = `${sessionsThisWeek} session${sessionsThisWeek !== 1 ? "s" : ""} cette semaine`;
+  }
+
+  return {
+    intensity: Math.min(intensity, 100), // Cap at 100%
+    label,
+    detail,
+    sessionsThisWeek,
+    daysActive,
+    goalCompletion,
+    totalDurationHours: Math.round(totalDurationHours * 10) / 10,
+  };
+};

@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import { useApp } from "../context/AppContext";
 import { usePageTitle } from "../hooks/usePageTitle.js";
+import { calculateWeeklyIntensity } from "../lib/analyticsService";
 import { normalizeDateToMidnight, toISODateString } from "../lib/dateUtils";
 import styles from "./AnalyticsPage.module.scss";
 
@@ -309,7 +310,7 @@ const HeatmapCalendar = memo(function HeatmapCalendar({ sessions }) {
  */
 function AnalyticsPage() {
   usePageTitle("Analytics");
-  const { stats, trainingSessions, achievements } = useApp();
+  const { stats, trainingSessions, achievements, userProfile } = useApp();
 
   // Generate last 30 days of data
   const last30Days = useMemo(() => {
@@ -428,17 +429,77 @@ function AnalyticsPage() {
           <div className={styles.chartHalf}>
             <div className={styles.weeklyIntensity}>
               <h3>Intensité hebdomadaire</h3>
-              <div className={styles.intensityBar}>
-                <div
-                  className={styles.intensityFill}
-                  style={{ width: "88%" }}
-                />
-              </div>
-              <p>Avancé : 88%</p>
-              <p className={styles.intensityNote}>
-                Vous avez atteint la fréquence cardiaque de niveau compétition
-                dans 4/5 sessions cette semaine.
-              </p>
+              {(() => {
+                // Calculate real intensity based on actual sessions
+                const weeklyGoal = userProfile?.weeklyGoal || 4;
+                const intensityData = calculateWeeklyIntensity(
+                  trainingSessions,
+                  weeklyGoal,
+                );
+
+                // Show empty state for new users
+                if (intensityData.intensity === 0) {
+                  return (
+                    <>
+                      <div className={styles.intensityBar}>
+                        <div
+                          className={styles.intensityFill}
+                          style={{ width: "0%" }}
+                        />
+                      </div>
+                      <p style={{ color: "#9ca3af", fontSize: "0.9rem" }}>
+                        {intensityData.label}
+                      </p>
+                      <p className={styles.intensityNote}>
+                        {intensityData.detail}
+                      </p>
+                    </>
+                  );
+                }
+
+                return (
+                  <>
+                    <div className={styles.intensityBar}>
+                      <div
+                        className={styles.intensityFill}
+                        style={{
+                          width: `${intensityData.intensity}%`,
+                          backgroundColor:
+                            intensityData.intensity >= 75
+                              ? "#fbbf24" // gold for elite
+                              : intensityData.intensity >= 60
+                                ? "#59d8e5" // turquoise for advanced
+                                : intensityData.intensity >= 45
+                                  ? "#3b82f6" // blue for intermediate
+                                  : "#9ca3af", // gray for light
+                        }}
+                      />
+                    </div>
+                    <p style={{ fontWeight: 600 }}>
+                      {intensityData.label} : {intensityData.intensity}%
+                    </p>
+                    <p className={styles.intensityNote}>
+                      {intensityData.detail}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "0.8rem",
+                        color: "#9ca3af",
+                        marginTop: "0.5rem",
+                      }}
+                    >
+                      {intensityData.sessionsThisWeek} session
+                      {intensityData.sessionsThisWeek !== 1 ? "s" : ""}
+                      {" · "}
+                      {intensityData.daysActive} jour
+                      {intensityData.daysActive !== 1 ? "s" : ""} actif
+                      {intensityData.daysActive !== 1 ? "s" : ""}
+                      {" · "}
+                      {intensityData.totalDurationHours}h total
+                    </p>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </div>
