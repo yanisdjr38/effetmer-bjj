@@ -9,10 +9,13 @@
 // 2. Résets et normalisations
 @import "reset";
 
-// 3. Composants réutilisables
+// 3. Accessibilité et focus management
+@import "accessibility";
+
+// 4. Composants réutilisables
 @import "components";
 
-// 4. Layouts et pages
+// 5. Layouts et pages
 @import "layout";
 
 // ============================================================================

@@ -2,6 +2,7 @@ import { Suspense, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import InstallPrompt from "./components/InstallPrompt.jsx";
 import Navbar from "./components/NavBar.jsx";
+import { OfflineIndicator } from "./components/OfflineIndicator.jsx";
 import { AppProvider, useApp } from "./context/AppContext";
 import AnalyticsPage from "./pages/AnalyticsPage.jsx";
 import ChallengesPage from "./pages/ChallengesPage.jsx";
@@ -50,7 +51,12 @@ function AppContent() {
   // Otherwise show normal dashboard
   return (
     <div className="app-layout">
-      <main className="app-content">
+      {/* Skip to main content link for keyboard navigation */}
+      <a href="#main-content" className="skip-link">
+        Aller au contenu principal
+      </a>
+
+      <main className="app-content" id="main-content" role="main">
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -68,6 +74,9 @@ function AppContent() {
 
       {/* Modern bottom navigation bar */}
       <Navbar />
+
+      {/* Offline status indicator */}
+      <OfflineIndicator />
 
       {/* PWA install prompt */}
       <InstallPrompt />

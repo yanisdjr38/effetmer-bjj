@@ -1,0 +1,95 @@
+// ============================================================================
+// ACCESSIBILITY STYLES - Keyboard navigation and focus management
+// ============================================================================
+
+/**
+ * Focus visible styles for keyboard navigation
+ * Important: Only show focus ring for keyboard users (not mouse/touch)
+ */
+
+/* Global focus visible */
+:focus-visible {
+  outline: 2px solid var(--color-primary, #59d8e5);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reset default browser focus for better control */
+:focus {
+  outline: none;
+}
+
+/* Buttons */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-primary, #59d8e5);
+  outline-offset: 2px;
+}
+
+/* Form inputs */
+.form-input:focus-visible,
+.form-select:focus-visible,
+.form-textarea:focus-visible {
+  border-color: var(--color-primary, #59d8e5);
+  box-shadow: 0 0 0 3px rgba(89, 216, 229, 0.1);
+}
+
+/* Skip to main content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary, #59d8e5);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 100;
+  border-radius: 0 0 4px 0;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 0;
+  left: 0;
+  outline: none;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+  :focus-visible {
+    outline-width: 3px;
+  }
+
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    border-width: 2px;
+  }
+}
+
+/* Dark mode focus improvements */
+@media (prefers-color-scheme: dark) {
+  :focus-visible {
+    outline-color: #59d8e5;
+    box-shadow: 0 0 0 4px rgba(89, 216, 229, 0.2);
+  }
+}

@@ -7,16 +7,32 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../styles/components/navbar.scss";
 
 /**
  * Modern bottom navigation bar (Strava/Samsung Health style)
  * Responsive with icon labels on smaller screens
+ * Supports keyboard navigation
  */
 function NavBar() {
   const [showMore, setShowMore] = useState(false);
+  const moreMenuRef = useRef(null);
+
+  useEffect(() => {
+    // Close more menu on Escape key
+    const handleEscape = (e) => {
+      if (e.key === "Escape" && showMore) {
+        setShowMore(false);
+      }
+    };
+
+    if (showMore) {
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
+    }
+  }, [showMore]);
 
   const MAIN_NAVIGATION_ITEMS = [
     { to: "/home", icon: faHome, label: "Accueil" },
@@ -59,8 +75,11 @@ function NavBar() {
           <button
             className={`navbar__link navbar__more-btn ${showMore ? "navbar__link--active" : ""}`}
             onClick={() => setShowMore(!showMore)}
-            aria-label="More options"
+            aria-label={showMore ? "Fermer les options" : "Plus d'options"}
+            aria-expanded={showMore}
+            aria-controls="navbar-more-menu"
             title="Plus"
+            type="button"
           >
             <FontAwesomeIcon icon={faCog} className="navbar__icon" />
             <span className="navbar__label">Plus</span>
@@ -75,7 +94,13 @@ function NavBar() {
 
       {/* More Menu */}
       {showMore && (
-        <div className="navbar__more-menu">
+        <div
+          className="navbar__more-menu"
+          ref={moreMenuRef}
+          id="navbar-more-menu"
+          role="menu"
+          aria-label="Options supplémentaires"
+        >
           <div className="navbar__more-content">
             {MORE_ITEMS.map((item) => (
               <NavLink
@@ -85,6 +110,7 @@ function NavBar() {
                   `navbar__more-item ${isActive ? "navbar__more-item--active" : ""}`
                 }
                 onClick={() => setShowMore(false)}
+                role="menuitem"
               >
                 {typeof item.icon === "string" ? (
                   <span className="navbar__more-emoji">{item.icon}</span>

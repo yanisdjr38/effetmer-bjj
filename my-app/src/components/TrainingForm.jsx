@@ -93,7 +93,10 @@ const TrainingForm = ({ onAdd, initialData = null }) => {
       {/* Date input */}
       <div className="form-group">
         <label htmlFor="date" className="form-label">
-          Date <span className="required">*</span>
+          Date{" "}
+          <span className="required" aria-label="requis">
+            *
+          </span>
         </label>
         <input
           id="date"
@@ -103,9 +106,15 @@ const TrainingForm = ({ onAdd, initialData = null }) => {
           onChange={handleChange}
           required
           aria-invalid={!!errors.date}
+          aria-required="true"
+          aria-describedby={errors.date ? "date-error" : undefined}
           className="form-input"
         />
-        {errors.date && <small className="form-error">{errors.date}</small>}
+        {errors.date && (
+          <small id="date-error" className="form-error" role="alert">
+            {errors.date}
+          </small>
+        )}
       </div>
 
       {/* Training type select */}
@@ -132,7 +141,10 @@ const TrainingForm = ({ onAdd, initialData = null }) => {
       {/* Duration input */}
       <div className="form-group">
         <label htmlFor="duration" className="form-label">
-          Durée (minutes) <span className="required">*</span>
+          Durée (minutes){" "}
+          <span className="required" aria-label="requis">
+            *
+          </span>
         </label>
         <input
           id="duration"
@@ -144,10 +156,14 @@ const TrainingForm = ({ onAdd, initialData = null }) => {
           onChange={handleChange}
           required
           aria-invalid={!!errors.duration}
+          aria-required="true"
+          aria-describedby={errors.duration ? "duration-error" : undefined}
           className="form-input"
         />
         {errors.duration && (
-          <small className="form-error">{errors.duration}</small>
+          <small id="duration-error" className="form-error" role="alert">
+            {errors.duration}
+          </small>
         )}
       </div>
 
@@ -175,6 +191,7 @@ const TrainingForm = ({ onAdd, initialData = null }) => {
           aria-label={
             initialData ? "Modifier l'entraînement" : "Ajouter l'entraînement"
           }
+          aria-busy={false}
         >
           {initialData ? "Modifier" : "Ajouter"}
         </button>

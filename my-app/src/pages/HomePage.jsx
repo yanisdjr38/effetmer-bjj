@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useApp } from "../context/AppContext.jsx";
+import { usePageTitle } from "../hooks/usePageTitle.js";
 import styles from "./HomePage.module.scss";
 
 /**
@@ -8,6 +9,7 @@ import styles from "./HomePage.module.scss";
  * Displays current streak, next scheduled session, last training, and performance metrics
  */
 function HomePage() {
+  usePageTitle("Accueil");
   const {
     stats,
     achievements,

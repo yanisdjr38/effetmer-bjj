@@ -1,26 +1,41 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { useApp } from "../context/AppContext";
+import { usePageTitle } from "../hooks/usePageTitle.js";
+import { normalizeDateToMidnight, toISODateString } from "../lib/dateUtils";
 import styles from "./AnalyticsPage.module.scss";
 
 /**
  * LineChart Component - Simple SVG line chart
+ * Memoized for performance optimization
  */
-function LineChart({ data, label, color = "#59d8e5" }) {
-  if (!data || data.length === 0) {
+const LineChart = memo(function LineChart({ data, label, color = "#59d8e5" }) {
+  // Guard: ensure data is array and non-empty
+  if (!data || !Array.isArray(data) || data.length === 0) {
     return (
       <div className={styles.emptyChart}>
-        <p>No data available yet</p>
+        <p>Aucune donnée disponible</p>
       </div>
     );
   }
 
-  const maxValue = Math.max(...data, 1);
+  // Filter out invalid data points
+  const validData = data.filter((d) => typeof d === "number" && !isNaN(d));
+  if (validData.length === 0) {
+    return (
+      <div className={styles.emptyChart}>
+        <p>Aucune donnée disponible</p>
+      </div>
+    );
+  }
+
+  const maxValue = Math.max(...validData, 1);
   const padding = 40;
   const chartHeight = 200;
   const chartWidth = 400;
-  const pointsSpacing = (chartWidth - padding * 2) / (data.length - 1 || 1);
+  const pointsSpacing =
+    (chartWidth - padding * 2) / (validData.length - 1 || 1);
 
-  const points = data
+  const points = validData
     .map((value, index) => {
       const x = padding + index * pointsSpacing;
       const y = chartHeight - (value / maxValue) * (chartHeight - padding);
@@ -94,7 +109,7 @@ function LineChart({ data, label, color = "#59d8e5" }) {
         />
 
         {/* Points */}
-        {data.map((value, index) => (
+        {validData.map((value, index) => (
           <circle
             key={index}
             cx={padding + index * pointsSpacing}
@@ -107,30 +122,42 @@ function LineChart({ data, label, color = "#59d8e5" }) {
       </svg>
     </div>
   );
-}
+});
 
 /**
  * PieChart Component - Simple SVG pie chart
+ * Memoized for performance optimization
  */
-function PieChart({ data, label, colors }) {
-  if (!data || Object.keys(data).length === 0) {
+const PieChart = memo(function PieChart({ data, label, colors }) {
+  // Guard: ensure data is object and not empty
+  if (!data || typeof data !== "object" || Object.keys(data).length === 0) {
     return (
       <div className={styles.emptyChart}>
-        <p>No data available yet</p>
+        <p>Aucune donnée disponible</p>
       </div>
     );
   }
 
-  const total = Object.values(data).reduce((sum, val) => sum + val, 0);
-  if (total === 0)
+  const validData = Object.entries(data).reduce((acc, [key, value]) => {
+    const num = Number(value);
+    if (!isNaN(num) && num >= 0) {
+      acc[key] = num;
+    }
+    return acc;
+  }, {});
+
+  const total = Object.values(validData).reduce((sum, val) => sum + val, 0);
+
+  if (total === 0) {
     return (
       <div className={styles.emptyChart}>
-        <p>No sessions yet</p>
+        <p>Pas encore de sessions</p>
       </div>
     );
+  }
 
   let currentAngle = -Math.PI / 2;
-  const slices = Object.entries(data).map(([name, value], index) => {
+  const slices = Object.entries(validData).map(([name, value], index) => {
     const sliceAngle = (value / total) * 2 * Math.PI;
     const startAngle = currentAngle;
     const endAngle = currentAngle + sliceAngle;
@@ -183,7 +210,7 @@ function PieChart({ data, label, colors }) {
         {slices}
       </svg>
       <div className={styles.legend}>
-        {Object.entries(data).map(([name, value], index) => (
+        {Object.entries(validData).map(([name, value], index) => (
           <div key={name} className={styles.legendItem}>
             <span
               className={styles.legendColor}
@@ -197,51 +224,58 @@ function PieChart({ data, label, colors }) {
       </div>
     </div>
   );
-}
+});
 
 /**
  * HeatmapCalendar - Github-style activity heatmap
+ * Shows training activity over last 12 weeks
+ * Memoized for performance optimization
  */
-function HeatmapCalendar({ sessions }) {
-  const weeks = [];
-  const today = new Date();
-  const startDate = new Date(today);
-  startDate.setDate(today.getDate() - today.getDay());
-  startDate.setDate(startDate.getDate() - startDate.getDay() * 7 + 7 * 12); // 12 weeks back
+const HeatmapCalendar = memo(function HeatmapCalendar({ sessions }) {
+  if (!sessions || sessions.length === 0) {
+    return (
+      <div className={styles.heatmapContainer}>
+        <h3>Training Activity (Last 12 Weeks)</h3>
+        <p style={{ textAlign: "center", opacity: 0.6 }}>No sessions yet</p>
+      </div>
+    );
+  }
 
-  // Create session count by date
+  // Create session count by ISO date string
   const sessionsByDate = {};
   sessions.forEach((session) => {
-    const dateStr = session.date.split("T")[0];
+    const dateStr = toISODateString(session.date);
     sessionsByDate[dateStr] = (sessionsByDate[dateStr] || 0) + 1;
   });
 
   const maxCount = Math.max(...Object.values(sessionsByDate), 1);
 
-  // Generate grid
-  let currentDate = new Date(startDate);
-  let weekDays = [];
+  // Generate grid for last 12 weeks (84 days)
+  const today = normalizeDateToMidnight(new Date());
+  const twelveWeeksAgo = new Date(today);
+  twelveWeeksAgo.setDate(twelveWeeksAgo.getDate() - 84);
+
+  const days = [];
+  const currentDate = new Date(twelveWeeksAgo);
 
   while (currentDate <= today) {
-    const dateStr = currentDate.toISOString().split("T")[0];
+    const dateStr = toISODateString(currentDate);
     const count = sessionsByDate[dateStr] || 0;
     const intensity = Math.min(count / maxCount, 1);
 
-    weekDays.push({
-      date: new Date(currentDate),
+    days.push({
+      dateStr,
       count,
       intensity,
-      dateStr,
     });
 
-    if (weekDays.length === 7 || currentDate.getTime() === today.getTime()) {
-      weeks.push([...weekDays]);
-      if (weekDays.length === 7) {
-        weekDays = [];
-      }
-    }
-
     currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  // Organize into weeks (7 days per week)
+  const weeks = [];
+  for (let i = 0; i < days.length; i += 7) {
+    weeks.push(days.slice(i, Math.min(i + 7, days.length)));
   }
 
   const getColor = (intensity) => {
@@ -268,28 +302,29 @@ function HeatmapCalendar({ sessions }) {
       </div>
     </div>
   );
-}
+});
 
 /**
  * AnalyticsPage - Comprehensive analytics and statistics dashboard
  */
 function AnalyticsPage() {
+  usePageTitle("Analytics");
   const { stats, trainingSessions, achievements } = useApp();
 
   // Generate last 30 days of data
   const last30Days = useMemo(() => {
     const daily = {};
-    const today = new Date();
+    const today = normalizeDateToMidnight(new Date());
 
     for (let i = 29; i >= 0; i--) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split("T")[0];
+      const dateStr = toISODateString(date);
       daily[dateStr] = 0;
     }
 
     trainingSessions.forEach((session) => {
-      const dateStr = session.date.split("T")[0];
+      const dateStr = toISODateString(session.date);
       if (dateStr in daily) {
         daily[dateStr] += Number(session.duration || 0);
       }
@@ -301,8 +336,8 @@ function AnalyticsPage() {
   // Training volume by type (last 30 days)
   const typeDistribution = useMemo(() => {
     const dist = {};
-    const types = new Set();
-    const thirtyDaysAgo = new Date();
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today);
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
     trainingSessions
@@ -310,7 +345,6 @@ function AnalyticsPage() {
       .forEach((session) => {
         const type = session.type || "other";
         dist[type] = (dist[type] || 0) + 1;
-        types.add(type);
       });
 
     return dist;
@@ -413,64 +447,7 @@ function AnalyticsPage() {
         <HeatmapCalendar sessions={trainingSessions} />
       </div>
 
-      {/* Top Partners Section */}
-      <div className={styles.topPartnersSection}>
-        <div className={styles.sectionHeader}>
-          <h2>Meilleurs partenaires d'entraînement</h2>
-          <a href="#all" className={styles.viewAll}>
-            Voir tout
-          </a>
-        </div>
-        <div className={styles.partnersList}>
-          {[
-            {
-              name: "Marcus Klitschko",
-              rounds: 24,
-              belt: "black",
-              weight: "heavyweight",
-            },
-            {
-              name: "Sarah Lopez",
-              rounds: 18,
-              belt: "purple",
-              weight: "lightweight",
-            },
-            {
-              name: "Julian Chen",
-              rounds: 15,
-              belt: "brown",
-              weight: "middleweight",
-            },
-          ].map((partner, idx) => (
-            <div key={idx} className={styles.partnerCard}>
-              <div className={styles.partnerAvatar}>
-                {partner.name.substring(0, 1)}
-              </div>
-              <div className={styles.partnerInfo}>
-                <h4>{partner.name}</h4>
-                <span
-                  className={styles.beltBadge}
-                  style={{
-                    backgroundColor: {
-                      white: "#e5e5e5",
-                      blue: "#3b82f6",
-                      purple: "#a855f7",
-                      brown: "#92400e",
-                      black: "#1f2937",
-                    }[partner.belt],
-                  }}
-                >
-                  {partner.belt.toUpperCase()}
-                </span>
-              </div>
-              <div className={styles.partnerStats}>
-                <span className={styles.roundsCount}>{partner.rounds}</span>
-                <span className={styles.roundsLabel}>rounds</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Top Partners section removed per request */}
     </section>
   );
 }
