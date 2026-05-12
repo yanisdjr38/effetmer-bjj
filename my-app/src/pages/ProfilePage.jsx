@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useApp } from "../context/AppContext";
 import { usePageTitle } from "../hooks/usePageTitle.js";
+import { calculateUserTier } from "../lib/progressionSystem";
 import styles from "./ProfilePage.module.scss";
 
 /**
@@ -321,7 +322,64 @@ function ProfilePage() {
       <div className={styles.hallOfFame}>
         <div className={styles.hallHeader}>
           <h2>🏅 Hall de la Gloire</h2>
-          <p>Rang: Pratiquant élite</p>
+          {(() => {
+            // Calculate dynamic tier based on real stats
+            const tier = calculateUserTier(
+              stats?.totalSessions || 0,
+              stats?.totalHours || 0,
+              achievements?.currentStreak || 0,
+              achievements?.goalsCompleted || 0,
+              achievements?.badges?.length || 0,
+            );
+            return (
+              <div style={{ marginTop: "1rem" }}>
+                <p
+                  style={{
+                    fontSize: "0.9rem",
+                    color: tier.color,
+                    fontWeight: 600,
+                  }}
+                >
+                  {tier.icon} Rang: {tier.name}
+                </p>
+                <p
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "#9ca3af",
+                    marginTop: "0.5rem",
+                  }}
+                >
+                  {tier.description}
+                </p>
+                {tier.nextTier && (
+                  <div style={{ marginTop: "0.75rem" }}>
+                    <div
+                      style={{ fontSize: "0.75rem", marginBottom: "0.25rem" }}
+                    >
+                      Progression vers {tier.nextTier}: {tier.progressToNext}%
+                    </div>
+                    <div
+                      style={{
+                        height: "4px",
+                        backgroundColor: "#333",
+                        borderRadius: "2px",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <div
+                        style={{
+                          height: "100%",
+                          backgroundColor: tier.color,
+                          width: `${tier.progressToNext}%`,
+                          transition: "width 0.3s ease",
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </div>
 
         <div className={styles.achievementsContainer}>
