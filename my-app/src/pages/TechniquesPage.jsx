@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { FaEdit, FaImage, FaTrashAlt, FaVideo } from "react-icons/fa";
+import { FaEdit, FaExternalLinkAlt, FaTrashAlt } from "react-icons/fa";
 import { useLocalStorage } from "../hooks/useLocalStorage.jsx";
 import styles from "./TechniquesPage.module.scss";
 
@@ -26,8 +26,7 @@ function TechniquesPage() {
     category: "soumissions",
     note: "",
     status: "à réviser",
-    image: null,
-    video: null,
+    videoLink: "",
   });
   const [editing, setEditing] = useState(null);
   const [filters, setFilters] = useState({
@@ -46,14 +45,8 @@ function TechniquesPage() {
   }, [form.title]);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files) {
-      const file = files[0];
-      const fileURL = URL.createObjectURL(file);
-      setForm((prev) => ({ ...prev, [name]: fileURL }));
-    } else {
-      setForm((prev) => ({ ...prev, [name]: value }));
-    }
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
     // Effacer l'erreur
     if (errors[name]) {
       setErrors((prev) => {
@@ -89,8 +82,7 @@ function TechniquesPage() {
       category: "soumissions",
       note: "",
       status: "à réviser",
-      image: null,
-      video: null,
+      videoLink: "",
     });
     setErrors({});
   };
@@ -119,8 +111,7 @@ function TechniquesPage() {
       category: "soumissions",
       note: "",
       status: "à réviser",
-      image: null,
-      video: null,
+      videoLink: "",
     });
     setErrors({});
   };
@@ -223,32 +214,16 @@ function TechniquesPage() {
             </div>
           </div>
 
-          <div className={styles.form_grid}>
-            <div className={styles.form_group}>
-              <label htmlFor="image">
-                <FaImage style={{ marginRight: "0.5rem" }} /> Image
-              </label>
-              <input
-                id="image"
-                type="file"
-                name="image"
-                accept="image/*"
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className={styles.form_group}>
-              <label htmlFor="video">
-                <FaVideo style={{ marginRight: "0.5rem" }} /> Vidéo
-              </label>
-              <input
-                id="video"
-                type="file"
-                name="video"
-                accept="video/*"
-                onChange={handleChange}
-              />
-            </div>
+          <div className={styles.form_group}>
+            <label htmlFor="videoLink">Lien vidéo (optionnel)</label>
+            <input
+              id="videoLink"
+              type="url"
+              name="videoLink"
+              placeholder="https://youtube.com/watch?v=... ou lien Google Drive"
+              value={form.videoLink}
+              onChange={handleChange}
+            />
           </div>
 
           <div className={styles.form_actions}>
@@ -382,12 +357,6 @@ function TechniquesPage() {
           <div className={styles.techniques_grid}>
             {filteredTechniques.map((t) => (
               <article key={t.id} className={styles.technique_card}>
-                <img
-                  src={t.image || "https://via.placeholder.com/300"}
-                  alt={t.title}
-                  className={styles.technique_media}
-                />
-
                 <div className={styles.technique_content}>
                   <h3 className={styles.technique_name}>{t.title}</h3>
 
@@ -412,6 +381,16 @@ function TechniquesPage() {
                   </div>
 
                   <div className={styles.technique_actions}>
+                    {t.videoLink && (
+                      <button
+                        onClick={() => window.open(t.videoLink, "_blank")}
+                        className="secondary"
+                        title="Voir la vidéo"
+                      >
+                        <FaExternalLinkAlt style={{ marginRight: "0.5rem" }} />{" "}
+                        Voir vidéo
+                      </button>
+                    )}
                     <button
                       onClick={() => handleEdit(t)}
                       className="primary"

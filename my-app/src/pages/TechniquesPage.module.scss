@@ -295,22 +295,41 @@
 
   .form_actions {
     display: flex;
+    flex-direction: column;
     gap: var(--space-4);
     margin-top: var(--space-6);
 
     @include respond-to("sm") {
+      flex-direction: row;
       justify-content: flex-end;
     }
 
     button {
-      padding: var(--space-3) var(--space-6);
+      padding: var(--space-4) var(--space-6);
       border: none;
       border-radius: var(--radius-lg);
       font-size: var(--font-size-base);
       font-weight: var(--font-weight-semibold);
       cursor: pointer;
       @include transition(all);
-      min-height: 44px;
+      min-height: 48px;
+      width: 100%;
+      background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        var(--color-primary-dark) 100%
+      );
+      color: white;
+      box-shadow: 0 4px 12px rgba(89, 216, 229, 0.3);
+
+      &:hover {
+        box-shadow: 0 6px 20px rgba(89, 216, 229, 0.4);
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
 
       &.primary {
         @include button-turquoise;
@@ -320,6 +339,7 @@
         background: rgba(177, 198, 249, 0.1);
         color: var(--color-secondary);
         border: 1px solid rgba(177, 198, 249, 0.3);
+        box-shadow: none;
 
         &:hover {
           background: rgba(177, 198, 249, 0.15);
@@ -328,6 +348,7 @@
       }
 
       @include respond-to("sm") {
+        width: auto;
         flex: 0 1 auto;
       }
     }

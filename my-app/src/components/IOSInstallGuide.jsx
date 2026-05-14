@@ -1,10 +1,21 @@
 import { memo } from "react";
+import {
+  FaCheckCircle,
+  FaMobile,
+  FaReply,
+  FaRocket,
+  FaShareAlt,
+  FaTimes,
+  FaWifi,
+} from "react-icons/fa";
 import "./ios-install-guide.scss";
 
 /**
- * IOSInstallGuide - Custom install instructions for iOS Safari users
- * Since iOS doesn't support beforeinstallprompt, guide users manually
- * Memoized for performance
+ * IOSInstallGuide - Premium iOS Safari install instructions
+ *
+ * Provides step-by-step visual guide for adding EFFETMER to home screen
+ * Includes benefits and premium design
+ * Supports dark mode
  */
 const IOSInstallGuide = memo(({ onDismiss }) => {
   return (
@@ -19,22 +30,23 @@ const IOSInstallGuide = memo(({ onDismiss }) => {
         {/* Header */}
         <div className="ios-guide-header">
           <h2 id="ios-title" className="ios-guide-title">
-            Installer EFFETMER
+            Ajouter à l'écran d'accueil
           </h2>
           <button
             className="ios-guide-close"
             onClick={onDismiss}
             aria-label="Fermer"
+            title="Fermer"
           >
-            ✕
+            <FaTimes />
           </button>
         </div>
 
         {/* Content */}
         <div className="ios-guide-content">
           <p className="ios-guide-intro">
-            Ajoute EFFETMER à ton écran d'accueil pour une expérience native
-            complète.
+            Installez EFFETMER en 3 étapes simples pour un accès direct depuis
+            votre écran d'accueil.
           </p>
 
           {/* Steps */}
@@ -43,11 +55,14 @@ const IOSInstallGuide = memo(({ onDismiss }) => {
             <div className="ios-step">
               <div className="ios-step-number">1</div>
               <div className="ios-step-content">
-                <h3>Appuie sur le bouton Partager</h3>
-                <p>
-                  Clique sur l'icône <strong>Partager</strong> en bas de l'écran
+                <h3>Appuyez sur le bouton Partager</h3>
+                <p className="ios-step-description">
+                  Appuyez sur l'icône <strong>Partager</strong> ou{" "}
+                  <strong>Parcourir</strong> en bas de votre écran Safari
                 </p>
-                <div className="ios-step-icon">↗️</div>
+                <div className="ios-step-icon">
+                  <FaShareAlt />
+                </div>
               </div>
             </div>
 
@@ -55,12 +70,14 @@ const IOSInstallGuide = memo(({ onDismiss }) => {
             <div className="ios-step">
               <div className="ios-step-number">2</div>
               <div className="ios-step-content">
-                <h3>Sélectionne "Sur l'écran d'accueil"</h3>
-                <p>
-                  Fais défiler vers le bas et appuie sur{" "}
+                <h3>Sélectionnez "Sur l'écran d'accueil"</h3>
+                <p className="ios-step-description">
+                  Faites défiler les options et choisissez{" "}
                   <strong>"Ajouter à l'écran d'accueil"</strong>
                 </p>
-                <div className="ios-step-icon">📲</div>
+                <div className="ios-step-icon">
+                  <FaReply />
+                </div>
               </div>
             </div>
 
@@ -68,35 +85,57 @@ const IOSInstallGuide = memo(({ onDismiss }) => {
             <div className="ios-step">
               <div className="ios-step-number">3</div>
               <div className="ios-step-content">
-                <h3>Confirme avec "Ajouter"</h3>
-                <p>
-                  Tu verras EFFETMER sur ton écran d'accueil et pourra l'ouvrir
-                  en un tap
+                <h3>Confirmez avec "Ajouter"</h3>
+                <p className="ios-step-description">
+                  Vérifiez le nom et l'icône, puis appuyez sur{" "}
+                  <strong>"Ajouter"</strong>
                 </p>
-                <div className="ios-step-icon">✅</div>
+                <div className="ios-step-icon">
+                  <FaCheckCircle style={{ color: "#34d399" }} />
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Benefits */}
+          {/* Benefits Section */}
           <div className="ios-guide-benefits">
-            <p className="ios-guide-benefits-title">Avantages :</p>
+            <p className="ios-guide-benefits-title">
+              ✨ Avantages de l'installation :
+            </p>
             <ul className="ios-guide-benefits-list">
-              <li>
-                <span className="ios-benefit-icon">🚀</span>
-                <span>Accès instant depuis l'écran d'accueil</span>
+              <li className="ios-benefit-item">
+                <span className="ios-benefit-icon">
+                  <FaMobile />
+                </span>
+                <span>
+                  <strong>Accès instantané</strong> - Lancez EFFETMER en un tap
+                </span>
               </li>
-              <li>
-                <span className="ios-benefit-icon">🔌</span>
-                <span>Fonctionne hors ligne</span>
+              <li className="ios-benefit-item">
+                <span className="ios-benefit-icon">
+                  <FaWifi />
+                </span>
+                <span>
+                  <strong>Fonctionne hors ligne</strong> - Pas besoin de
+                  connexion internet
+                </span>
               </li>
-              <li>
-                <span className="ios-benefit-icon">🎯</span>
-                <span>Plus rapide et fluide</span>
+              <li className="ios-benefit-item">
+                <span className="ios-benefit-icon">
+                  <FaRocket />
+                </span>
+                <span>
+                  <strong>Ultra-rapide</strong> - Chargement très performant
+                </span>
               </li>
-              <li>
-                <span className="ios-benefit-icon">📱</span>
-                <span>Expérience plein écran native</span>
+              <li className="ios-benefit-item">
+                <span className="ios-benefit-icon">
+                  <FaMobile />
+                </span>
+                <span>
+                  <strong>Expérience native</strong> - Comme une vraie
+                  application
+                </span>
               </li>
             </ul>
           </div>
@@ -108,7 +147,7 @@ const IOSInstallGuide = memo(({ onDismiss }) => {
             className="ios-guide-btn ios-guide-btn--primary"
             onClick={onDismiss}
           >
-            J'ai compris
+            C'est compris !
           </button>
           <button
             className="ios-guide-btn ios-guide-btn--secondary"
