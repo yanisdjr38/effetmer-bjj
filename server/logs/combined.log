@@ -86,3 +86,12 @@ Error: Email service not initialized
 [2026-05-15 20:11:27] INFO    ✓ Email service initialized (Resend)
 [2026-05-15 20:11:27] INFO    Server running on port 4000
 [2026-05-15 20:11:27] INFO    Environment: development
+[2026-05-15 20:22:51] INFO    JWT secrets validated
+[2026-05-15 20:22:51] INFO    ✓ Connected to MongoDB
+[2026-05-15 20:22:51] INFO    Database connected
+[2026-05-15 20:22:51] INFO    ✓ Email service initialized (Resend)
+[2026-05-15 20:22:51] INFO    Server running on port 4000
+[2026-05-15 20:22:51] INFO    Environment: development
+[2026-05-15 20:23:16] INFO    ✓ Magic link email sent to yanis.djouahra38@gmail.com
+[2026-05-15 20:23:16] INFO    Magic link requested for yanis.djouahra38@gmail.com
+[2026-05-15 20:23:16] INFO    ::ffff:127.0.0.1 - - [15/May/2026:18:23:16 +0000] "POST /api/auth/request-magic-link HTTP/1.1" 200 115 "http://localhost:3000/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0" 465.263 ms
