@@ -1,0 +1,48 @@
+[2026-05-15 19:24:42] ERROR   Failed to connect to MongoDB: bad auth : authentication failed
+MongoServerError: bad auth : authentication failed
+    at Connection.onMessage (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/connection.js:202:26)
+    at MessageStream.<anonymous> (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/connection.js:61:60)
+    at MessageStream.emit (node:events:518:28)
+    at processIncomingData (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/message_stream.js:124:16)
+    at MessageStream._write (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/message_stream.js:33:9)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at TLSSocket.ondata (node:internal/streams/readable:1009:22)
+    at TLSSocket.emit (node:events:518:28)
+[2026-05-15 19:26:35] ERROR   Failed to connect to MongoDB: bad auth : authentication failed
+MongoServerError: bad auth : authentication failed
+    at Connection.onMessage (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/connection.js:202:26)
+    at MessageStream.<anonymous> (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/connection.js:61:60)
+    at MessageStream.emit (node:events:518:28)
+    at processIncomingData (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/message_stream.js:124:16)
+    at MessageStream._write (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/message_stream.js:33:9)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at TLSSocket.ondata (node:internal/streams/readable:1009:22)
+    at TLSSocket.emit (node:events:518:28)
+[2026-05-15 19:28:00] ERROR   Failed to connect to MongoDB: bad auth : authentication failed
+MongoServerError: bad auth : authentication failed
+    at Connection.onMessage (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/connection.js:202:26)
+    at MessageStream.<anonymous> (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/connection.js:61:60)
+    at MessageStream.emit (node:events:518:28)
+    at processIncomingData (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/message_stream.js:124:16)
+    at MessageStream._write (/home/yanis/Documents/effetmer_bjj/server/node_modules/mongodb/lib/cmap/message_stream.js:33:9)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at TLSSocket.ondata (node:internal/streams/readable:1009:22)
+    at TLSSocket.emit (node:events:518:28)
+[2026-05-15 19:32:59] ERROR   Failed to send magic link email: Email service not initialized
+Error: Email service not initialized
+    at sendMagicLinkEmail (file:///home/yanis/Documents/effetmer_bjj/server/src/config/email.js:35:13)
+    at requestMagicLink (file:///home/yanis/Documents/effetmer_bjj/server/src/services/authService.js:34:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async postRequestMagicLink (file:///home/yanis/Documents/effetmer_bjj/server/src/controllers/authController.js:12:20)
+[2026-05-15 19:32:59] ERROR   Error [INTERNAL_ERROR]: Email service not initialized Email service not initialized
+Error: Email service not initialized
+    at sendMagicLinkEmail (file:///home/yanis/Documents/effetmer_bjj/server/src/config/email.js:35:13)
+    at requestMagicLink (file:///home/yanis/Documents/effetmer_bjj/server/src/services/authService.js:34:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async postRequestMagicLink (file:///home/yanis/Documents/effetmer_bjj/server/src/controllers/authController.js:12:20)

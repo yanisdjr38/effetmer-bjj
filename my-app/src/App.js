@@ -4,10 +4,14 @@ import InstallPrompt from "./components/InstallPrompt.jsx";
 import Navbar from "./components/NavBar.jsx";
 import { OfflineIndicator } from "./components/OfflineIndicator.jsx";
 import { AppProvider, useApp } from "./context/AppContext";
+import { AuthProvider } from "./context/AuthContext";
+import { useAuth } from "./hooks/useAuth.js";
 import AnalyticsPage from "./pages/AnalyticsPage.jsx";
 import ChallengesPage from "./pages/ChallengesPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
 import OnboardingPage from "./pages/OnboardingPage.jsx";
+import ProfileCompletionPage from "./pages/ProfileCompletionPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import SettingsPage from "./pages/SettingsPage.jsx";
 import TechniquesPage from "./pages/TechniquesPage.jsx";
@@ -23,23 +27,54 @@ const PageLoader = () => (
 );
 
 /**
- * AppContent - Main app content with routing
- * Handles onboarding gate - redirects to OnboardingPage if setup not complete
+ * ProtectedAppContent - Main app content with routing
+ * Requires AuthContext to be available
+ * Handles authentication and onboarding gates
+ * Flow: Not Authenticated -> LoginPage
+ *       Authenticated but incomplete profile -> ProfileCompletionPage
+ *       Authenticated and complete profile -> Check onboarding -> Dashboard
  */
-function AppContent() {
+function ProtectedAppContent() {
+  const {
+    isAuthenticated,
+    isProfileComplete,
+    isLoading: authLoading,
+  } = useAuth();
   const { onboarding } = useApp();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    // Small delay to ensure context is ready
-    setIsLoading(false);
-  }, []);
+    // Wait a moment for auth context to hydrate
+    if (!authLoading) {
+      const timer = setTimeout(() => setIsReady(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [authLoading]);
 
-  if (isLoading) {
+  // Show loader while initializing auth
+  if (!isReady || authLoading) {
     return <PageLoader />;
   }
 
-  // If onboarding not complete, show onboarding page
+  // Flow 1: Not authenticated -> Show login
+  if (!isAuthenticated) {
+    return (
+      <Routes>
+        <Route path="*" element={<LoginPage />} />
+      </Routes>
+    );
+  }
+
+  // Flow 2: Authenticated but profile incomplete -> Show profile completion
+  if (!isProfileComplete) {
+    return (
+      <Routes>
+        <Route path="*" element={<ProfileCompletionPage />} />
+      </Routes>
+    );
+  }
+
+  // Flow 3: Profile complete but onboarding incomplete -> Show onboarding
   if (!onboarding.isComplete) {
     return (
       <Routes>
@@ -48,7 +83,7 @@ function AppContent() {
     );
   }
 
-  // Otherwise show normal dashboard
+  // Flow 4: Everything complete -> Show dashboard with all routes
   return (
     <div className="app-layout">
       {/* Skip to main content link for keyboard navigation */}
@@ -84,10 +119,26 @@ function AppContent() {
   );
 }
 
-export default function App() {
+/**
+ * AppWithAuth - Adds AppContext for dashboard features
+ * Positioned inside AuthProvider so ProtectedAppContent can use useAuth hook
+ */
+function AppWithAuth() {
   return (
     <AppProvider>
-      <AppContent />
+      <ProtectedAppContent />
     </AppProvider>
+  );
+}
+
+/**
+ * App - Root component
+ * Wraps everything with AuthProvider first so auth is available globally
+ */
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppWithAuth />
+    </AuthProvider>
   );
 }
