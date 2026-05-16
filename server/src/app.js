@@ -8,6 +8,11 @@ import routes from "./routes/index.js";
 
 const app = express();
 
+// Trust the proxy (e.g. Railway, Heroku) so `X-Forwarded-For` is trusted
+// This is required for express-rate-limit to correctly identify clients
+// when the app is deployed behind a proxy/load balancer.
+app.set("trust proxy", 1);
+
 // Security middleware
 app.use(helmet());
 
