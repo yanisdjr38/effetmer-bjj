@@ -6,7 +6,7 @@ import {
 
 export const getCurrentUser = async (req, res, next) => {
   try {
-    const userId = req.user.sub; // JWT subject is user ID
+    const userId = req.user.userId;
 
     const user = await getUserById(userId);
 
@@ -21,7 +21,7 @@ export const getCurrentUser = async (req, res, next) => {
 
 export const updateProfile = async (req, res, next) => {
   try {
-    const userId = req.user.sub;
+    const userId = req.user.userId;
     const profileData = req.body;
 
     const user = await updateUserProfile(userId, profileData);
@@ -38,7 +38,7 @@ export const updateProfile = async (req, res, next) => {
 
 export const updateSettings = async (req, res, next) => {
   try {
-    const userId = req.user.sub;
+    const userId = req.user.userId;
     const settings = req.body;
 
     const user = await updateUserSettings(userId, settings);

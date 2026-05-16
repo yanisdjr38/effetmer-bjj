@@ -62,7 +62,7 @@ export const postRefreshToken = async (req, res, next) => {
 
 export const postLogout = async (req, res, next) => {
   try {
-    const userId = req.user.sub; // JWT subject is user ID
+    const userId = req.user.userId;
 
     await logout(userId);
 
