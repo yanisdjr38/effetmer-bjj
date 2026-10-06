@@ -15,4 +15,14 @@ root.render(
 );
 
 // PWA - Enregistrement du service worker
-serviceWorkerRegistration.register();
+serviceWorkerRegistration.register({
+  onUpdate: (registration) => {
+    const shouldReload = window.confirm(
+      "Une nouvelle version d'EFFETMER est disponible. Recharger maintenant ?",
+    );
+    if (shouldReload && registration.waiting) {
+      registration.waiting.postMessage({ type: "SKIP_WAITING" });
+      window.location.reload();
+    }
+  },
+});

@@ -8,6 +8,11 @@ export const useSettings = () => {
   const [settings, setSettings] = useLocalStorage("appSettings", {
     theme: "dark",
     notifications: true,
+    notificationTypes: {
+      trainingReminders: true,
+      achievementUnlocked: true,
+      monthlyChallenges: false,
+    },
     language: "fr",
     autoSync: true,
     syncedAt: null,

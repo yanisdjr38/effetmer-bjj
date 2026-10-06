@@ -11,6 +11,7 @@
   right: 0;
   background: rgba(18, 20, 20, 0.95);
   border-top: 1px solid rgba(89, 216, 229, 0.1);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   z-index: 100;
   backdrop-filter: blur(20px);
 
@@ -158,7 +159,7 @@
 // More menu dropdown
 .navbar__more-menu {
   position: fixed;
-  bottom: 70px;
+  bottom: calc(70px + env(safe-area-inset-bottom, 0px));
   right: 0;
   left: 0;
   background: rgba(18, 20, 20, 0.98);
@@ -171,7 +172,7 @@
   overflow-y: auto;
 
   @media (min-width: 768px) {
-    bottom: 80px;
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
     left: auto;
     right: var(--space-4);
     width: 280px;
@@ -269,7 +270,7 @@
   }
 }
 
-// Ensure content doesn't hide behind navbar
+// Ensure content doesn't hide behind navbar (incl. zone de sécurité iOS)
 body {
-  padding-bottom: var(--nav-height, 70px);
+  padding-bottom: calc(var(--nav-height, 70px) + env(safe-area-inset-bottom, 0px));
 }

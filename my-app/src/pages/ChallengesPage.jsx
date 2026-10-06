@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useApp } from "../context/AppContext";
+import { computeGoalProgress } from "../lib/analyticsService.js";
 import styles from "./ChallengesPage.module.scss";
 
 /**
@@ -7,9 +8,28 @@ import styles from "./ChallengesPage.module.scss";
  * Removed community leaderboard, focused on individual progression
  */
 function ChallengesPage() {
-  const { goals, addGoal, completeGoal, deleteGoal, stats, userProfile } =
-    useApp();
+  const {
+    goals,
+    addGoal,
+    completeGoal,
+    deleteGoal,
+    stats,
+    userProfile,
+    trainingSessions,
+    techniques,
+  } = useApp();
   const [showAddGoal, setShowAddGoal] = useState(false);
+  const [isSubmittingGoal, setIsSubmittingGoal] = useState(false);
+
+  // Progression réelle calculée à partir des séances/techniques enregistrées
+  const activeGoals = useMemo(
+    () =>
+      goals.current.map((goal) => ({
+        ...goal,
+        current: computeGoalProgress(goal, trainingSessions, techniques),
+      })),
+    [goals.current, trainingSessions, techniques],
+  );
   const [newGoal, setNewGoal] = useState({
     title: "",
     description: "",
@@ -28,7 +48,10 @@ function ChallengesPage() {
 
   // Handle add new goal
   const handleAddGoal = useCallback(() => {
-    if (newGoal.title && newGoal.target > 0) {
+    if (isSubmittingGoal || !newGoal.title || !(newGoal.target > 0)) return;
+
+    setIsSubmittingGoal(true);
+    try {
       addGoal({
         ...newGoal,
         current: 0,
@@ -42,8 +65,10 @@ function ChallengesPage() {
         deadline: "",
       });
       setShowAddGoal(false);
+    } finally {
+      setIsSubmittingGoal(false);
     }
-  }, [newGoal, addGoal]);
+  }, [newGoal, addGoal, isSubmittingGoal]);
 
   // Handle complete goal
   const handleCompleteGoal = useCallback(
@@ -55,9 +80,10 @@ function ChallengesPage() {
     [completeGoal],
   );
 
-  // Calculate goal progress percentage
+  // Calculate goal progress percentage (cap at 100% for display)
   const getProgressPercentage = (goal) => {
-    return Math.round((goal.current / goal.target) * 100);
+    if (!goal.target) return 0;
+    return Math.min(100, Math.round((goal.current / goal.target) * 100));
   };
 
   return (
@@ -167,8 +193,9 @@ function ChallengesPage() {
             <button
               className={`${styles.btn} ${styles.primary}`}
               onClick={handleAddGoal}
+              disabled={isSubmittingGoal}
             >
-              Créer l'objectif
+              {isSubmittingGoal ? "Création..." : "Créer l'objectif"}
             </button>
             <button
               className={`${styles.btn} ${styles.secondary}`}
@@ -194,7 +221,7 @@ function ChallengesPage() {
           </div>
         ) : (
           <div className={styles.goalsList}>
-            {goals.current.map((goal) => (
+            {activeGoals.map((goal) => (
               <div key={goal.id} className={styles.goalCard}>
                 <div className={styles.goalHeader}>
                   <div className={styles.goalTitle}>
@@ -296,12 +323,12 @@ function ChallengesPage() {
           </div>
           <div className={styles.statCard}>
             <div className={styles.statValue}>
-              {goals.current.length > 0
+              {activeGoals.length > 0
                 ? Math.round(
-                    goals.current.reduce(
+                    activeGoals.reduce(
                       (sum, g) => sum + getProgressPercentage(g),
                       0,
-                    ) / goals.current.length,
+                    ) / activeGoals.length,
                   )
                 : 0}
               %

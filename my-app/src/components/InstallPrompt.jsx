@@ -121,20 +121,9 @@ const InstallPrompt = memo(() => {
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
     setInstalling(true);
-
     try {
-      deferredPrompt.prompt();
-      const result = await deferredPrompt.userChoice();
-
-      if (result.outcome === "accepted") {
-        console.log("✅ PWA installation accepted");
-        handleInstall();
-      } else {
-        console.log("❌ Installation dismissed");
-        handleDismiss(false);
-      }
-    } catch (error) {
-      console.error("Installation prompt error:", error);
+      // handleInstall gère déjà le prompt natif et le dismiss en cas de refus
+      await handleInstall();
     } finally {
       setInstalling(false);
     }

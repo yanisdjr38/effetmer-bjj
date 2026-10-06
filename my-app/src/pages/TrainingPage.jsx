@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FaCalendarAlt,
   FaClock,
@@ -6,44 +6,43 @@ import {
   FaStickyNote,
   FaTrashAlt,
 } from "react-icons/fa";
+import { useSearchParams } from "react-router-dom";
 import TrainingForm from "../components/TrainingForm.jsx";
-import { useLocalStorage } from "../hooks/useLocalStorage.jsx";
+import { useApp } from "../context/AppContext.jsx";
 import { usePageTitle } from "../hooks/usePageTitle.js";
+import { TRAINING_TYPES, TRAINING_TYPE_LABELS } from "../lib/constants.js";
 import styles from "./TrainingPage.module.scss";
-
-const TRAINING_TYPES = {
-  techniques: "Techniques",
-  drill: "Drill",
-  sparring: "Sparring",
-  openmat: "Open Mat",
-  muscu: "Musculation",
-  cardio: "Cardio",
-  competition: "Compétition",
-};
 
 /**
  * TrainingPage - Gestion et visualisation des entraînements
  */
 function TrainingPage() {
   usePageTitle("Entraînement");
-  const [sessions, setSessions] = useLocalStorage("trainingSessions", []);
+  const { trainingSessions: sessions, addTrainingSession, updateTrainingSession, deleteTrainingSession } =
+    useApp();
   const [editingSession, setEditingSession] = useState(null);
   const [filters, setFilters] = useState({ date: "", type: "" });
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Raccourci PWA "Ajouter une séance" (manifest.json) : /training?action=new
+  useEffect(() => {
+    if (searchParams.get("action") === "new") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      document.getElementById("date")?.focus();
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const handleAdd = useCallback(
     (newSession) => {
-      let updated;
       if (editingSession) {
-        updated = sessions.map((s) =>
-          s.id === editingSession.id ? { ...newSession, id: s.id } : s,
-        );
+        updateTrainingSession(editingSession.id, newSession);
         setEditingSession(null);
       } else {
-        updated = [...sessions, { ...newSession, id: Date.now() }];
+        addTrainingSession(newSession);
       }
-      setSessions(updated);
     },
-    [sessions, editingSession, setSessions],
+    [editingSession, addTrainingSession, updateTrainingSession],
   );
 
   const handleEdit = useCallback((session) => {
@@ -56,10 +55,10 @@ function TrainingPage() {
       if (
         window.confirm("Êtes-vous sûr de vouloir supprimer cet entraînement ?")
       ) {
-        setSessions(sessions.filter((s) => s.id !== id));
+        deleteTrainingSession(id);
       }
     },
-    [sessions, setSessions],
+    [deleteTrainingSession],
   );
 
   const handleResetFilters = useCallback(() => {
@@ -133,8 +132,8 @@ function TrainingPage() {
               onChange={(e) => setFilters({ ...filters, type: e.target.value })}
             >
               <option value="">Tous les types</option>
-              {Object.entries(TRAINING_TYPES).map(([key, label]) => (
-                <option key={key} value={key}>
+              {TRAINING_TYPES.map(({ value, label }) => (
+                <option key={value} value={value}>
                   {label}
                 </option>
               ))}
@@ -154,44 +153,17 @@ function TrainingPage() {
         {/* Stats */}
         {filteredSessions.length > 0 && (
           <div className={styles.stats_summary}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-                {stats.count}
-              </div>
-              <div
-                style={{
-                  fontSize: "0.875rem",
-                  color: "var(--color-neutral-600)",
-                }}
-              >
-                Entraînement{stats.count > 1 ? "s" : ""}
-              </div>
+            <div className={styles.stat_item}>
+              <div>{stats.count}</div>
+              <div>Entraînement{stats.count > 1 ? "s" : ""}</div>
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-                {stats.totalDuration} min
-              </div>
-              <div
-                style={{
-                  fontSize: "0.875rem",
-                  color: "var(--color-neutral-600)",
-                }}
-              >
-                Total
-              </div>
+            <div className={styles.stat_item}>
+              <div>{stats.totalDuration} min</div>
+              <div>Total</div>
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-                {stats.averageDuration} min
-              </div>
-              <div
-                style={{
-                  fontSize: "0.875rem",
-                  color: "var(--color-neutral-600)",
-                }}
-              >
-                Moyenne
-              </div>
+            <div className={styles.stat_item}>
+              <div>{stats.averageDuration} min</div>
+              <div>Moyenne</div>
             </div>
           </div>
         )}
@@ -222,19 +194,8 @@ function TrainingPage() {
                       day: "numeric",
                     })}
                   </span>
-                  <span
-                    style={{
-                      display: "inline-block",
-                      background: "var(--color-accent-600)",
-                      color: "white",
-                      padding: "0.25rem 0.75rem",
-                      borderRadius: "var(--radius-md)",
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      maxWidth: "fit-content",
-                    }}
-                  >
-                    {TRAINING_TYPES[s.type] || s.type}
+                  <span className={styles.session_type_badge}>
+                    {TRAINING_TYPE_LABELS[s.type] || s.type}
                   </span>
                   <span className={styles.session_duration}>
                     <FaClock style={{ marginRight: "0.5rem" }} />
@@ -257,7 +218,7 @@ function TrainingPage() {
                   </button>
                   <button
                     onClick={() => handleDelete(s.id)}
-                    className="danger"
+                    className={styles.danger}
                     title="Supprimer cet entraînement"
                   >
                     <FaTrashAlt style={{ marginRight: "0.5rem" }} /> Supprimer

@@ -112,6 +112,10 @@
     }
   }
 
+  .stat_item {
+    text-align: center;
+  }
+
   .sessions_list {
     display: flex;
     flex-direction: column;
@@ -149,6 +153,17 @@
       font-size: var(--font-size-base);
       font-weight: 700;
       color: var(--color-primary);
+    }
+
+    .session_type_badge {
+      display: inline-block;
+      width: fit-content;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-md);
+      background: var(--gradient-accent);
+      color: var(--color-on-primary);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
     }
 
     .session_duration {

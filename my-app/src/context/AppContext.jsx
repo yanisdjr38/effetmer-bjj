@@ -62,13 +62,32 @@ export const AppProvider = ({ children }) => {
           ).date
         : null;
 
+    const nextAchievements = {
+      streak: newStreak,
+      longestStreak: Math.max(achievements.longestStreak || 0, newStreak),
+      lastTrainingDate,
+    };
+
+    const alreadySynced =
+      achievements.streak === nextAchievements.streak &&
+      achievements.longestStreak === nextAchievements.longestStreak &&
+      achievements.lastTrainingDate === nextAchievements.lastTrainingDate;
+
+    if (alreadySynced) {
+      return;
+    }
+
     setAchievements((prev) => ({
       ...prev,
-      streak: newStreak,
-      longestStreak: Math.max(prev.longestStreak || 0, newStreak),
-      lastTrainingDate,
+      ...nextAchievements,
     }));
-  }, [trainingSessions, setAchievements]);
+  }, [
+    trainingSessions,
+    setAchievements,
+    achievements.longestStreak,
+    achievements.streak,
+    achievements.lastTrainingDate,
+  ]);
 
   // Compute stats using pure service function
   const stats = useMemo(() => {

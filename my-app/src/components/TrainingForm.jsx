@@ -1,23 +1,6 @@
-import {
-  faBolt,
-  faBook,
-  faDumbbell,
-  faFire,
-  faPerson,
-  faTrophy,
-} from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useState } from "react";
+import { TRAINING_TYPES } from "../lib/constants.js";
 import "./training-form.scss";
-
-const TRAINING_TYPES = [
-  { value: "techniques", label: "Techniques", icon: faBook },
-  { value: "drill", label: "Drill", icon: faBolt },
-  { value: "sparring", label: "Sparring", icon: faPerson },
-  { value: "openmat", label: "Open Mat", icon: faDumbbell },
-  { value: "muscu", label: "Musculation", icon: faBolt },
-  { value: "cardio", label: "Cardio", icon: faFire },
-  { value: "competition", label: "Compétition", icon: faTrophy },
-];
 
 /**
  * TrainingForm - Add/edit training session with validation
@@ -33,6 +16,7 @@ const TrainingForm = ({ onAdd, initialData = null }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (initialData) {
@@ -71,6 +55,7 @@ const TrainingForm = ({ onAdd, initialData = null }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     const newErrors = validateForm();
     if (Object.keys(newErrors).length > 0) {
@@ -78,9 +63,14 @@ const TrainingForm = ({ onAdd, initialData = null }) => {
       return;
     }
 
-    onAdd({ ...form });
-    setForm({ date: "", type: "techniques", duration: "", note: "" });
-    setErrors({});
+    setIsSubmitting(true);
+    try {
+      onAdd({ ...form });
+      setForm({ date: "", type: "techniques", duration: "", note: "" });
+      setErrors({});
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -191,7 +181,8 @@ const TrainingForm = ({ onAdd, initialData = null }) => {
           aria-label={
             initialData ? "Modifier l'entraînement" : "Ajouter l'entraînement"
           }
-          aria-busy={false}
+          aria-busy={isSubmitting}
+          disabled={isSubmitting}
         >
           {initialData ? "Modifier" : "Ajouter"}
         </button>
