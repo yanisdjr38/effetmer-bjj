@@ -5,37 +5,32 @@ import "./ProfileCompletionPage.scss";
 
 /**
  * ProfileCompletionPage - For new users to complete their profile
- * Required fields: firstName, lastName, weightClass, beltLevel, yearsTraining
+ * Champs attendus par le backend (server/src/models/User.js: profile.*)
  */
 export default function ProfileCompletionPage() {
   const navigate = useNavigate();
-  const { user, updateProfile, isLoading, error: authError } = useAuth();
+  const { user, updateProfile, error: authError } = useAuth();
 
   const [formData, setFormData] = useState({
-    firstName: user?.firstName || "",
-    lastName: user?.lastName || "",
-    weightClass: user?.weightClass || "",
-    beltLevel: user?.beltLevel || "white",
-    yearsTraining: user?.yearsTraining || 0,
-    gym: user?.gym || "",
-    coachName: user?.coachName || "",
+    firstName: user?.profile?.firstName || "",
+    lastName: user?.profile?.lastName || "",
+    academy: user?.profile?.academy || "",
+    belt: user?.profile?.belt || "white",
+    weight: user?.profile?.weight || "",
+    yearsOfPractice: user?.profile?.yearsOfPractice || 0,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const weightClasses = [
-    "Plumes (até 56kg)",
-    "Leve (56-62kg)",
-    "Meio-leve (62-69kg)",
-    "Médio (69-76kg)",
-    "Meio-pesado (76-82kg)",
-    "Pesado (82-89kg)",
-    "Super pesado (89-96kg)",
-    "Pesadíssimo (+96kg)",
-  ];
-
-  const beltLevels = ["white", "blue", "purple", "brown", "black", "coral"];
+  const belts = ["white", "blue", "purple", "brown", "black"];
+  const beltLabels = {
+    white: "Blanche",
+    blue: "Bleue",
+    purple: "Violette",
+    brown: "Marron",
+    black: "Noire",
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,11 +44,12 @@ export default function ProfileCompletionPage() {
     e.preventDefault();
     setError("");
 
-    // Validate required fields
     if (
       !formData.firstName.trim() ||
       !formData.lastName.trim() ||
-      !formData.weightClass
+      !formData.academy.trim() ||
+      !formData.weight ||
+      Number(formData.weight) <= 0
     ) {
       setError("Veuillez remplir tous les champs obligatoires");
       return;
@@ -61,7 +57,14 @@ export default function ProfileCompletionPage() {
 
     setIsSubmitting(true);
     try {
-      await updateProfile(formData);
+      await updateProfile({
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        academy: formData.academy.trim(),
+        belt: formData.belt,
+        weight: Number(formData.weight),
+        yearsOfPractice: Number(formData.yearsOfPractice) || 0,
+      });
       // Profile complete, redirect to home
       setTimeout(() => {
         navigate("/");
@@ -120,86 +123,70 @@ export default function ProfileCompletionPage() {
               </div>
             </div>
 
-            {/* Weight Class */}
+            {/* Academy */}
             <div className="form-group">
-              <label htmlFor="weightClass">
-                Catégorie de poids <span className="required">*</span>
+              <label htmlFor="academy">
+                Académie / Équipe <span className="required">*</span>
               </label>
-              <select
-                id="weightClass"
-                name="weightClass"
-                value={formData.weightClass}
+              <input
+                id="academy"
+                type="text"
+                name="academy"
+                value={formData.academy}
                 onChange={handleChange}
+                placeholder="Votre académie BJJ"
                 disabled={isSubmitting}
                 required
+              />
+            </div>
+
+            {/* Belt Level */}
+            <div className="form-group">
+              <label htmlFor="belt">Ceinture</label>
+              <select
+                id="belt"
+                name="belt"
+                value={formData.belt}
+                onChange={handleChange}
+                disabled={isSubmitting}
               >
-                <option value="">Sélectionner une catégorie</option>
-                {weightClasses.map((wc) => (
-                  <option key={wc} value={wc}>
-                    {wc}
+                {belts.map((belt) => (
+                  <option key={belt} value={belt}>
+                    {beltLabels[belt]}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* Belt Level */}
+            {/* Weight */}
             <div className="form-group">
-              <label htmlFor="beltLevel">Ceinture</label>
-              <select
-                id="beltLevel"
-                name="beltLevel"
-                value={formData.beltLevel}
+              <label htmlFor="weight">
+                Poids (kg) <span className="required">*</span>
+              </label>
+              <input
+                id="weight"
+                type="number"
+                name="weight"
+                value={formData.weight}
                 onChange={handleChange}
+                min="30"
+                max="300"
                 disabled={isSubmitting}
-              >
-                <option value="white">Blanche</option>
-                <option value="blue">Bleue</option>
-                <option value="purple">Violette</option>
-                <option value="brown">Marron</option>
-                <option value="black">Noire</option>
-                <option value="coral">Corail</option>
-              </select>
+                required
+              />
             </div>
 
-            {/* Years Training */}
+            {/* Years of Practice */}
             <div className="form-group">
-              <label htmlFor="yearsTraining">Années d'entraînement</label>
+              <label htmlFor="yearsOfPractice">Années d'entraînement</label>
               <input
-                id="yearsTraining"
+                id="yearsOfPractice"
                 type="number"
-                name="yearsTraining"
-                value={formData.yearsTraining}
+                name="yearsOfPractice"
+                value={formData.yearsOfPractice}
                 onChange={handleChange}
                 min="0"
                 step="0.5"
-                disabled={isSubmitting}
-              />
-            </div>
-
-            {/* Gym Name (Optional) */}
-            <div className="form-group">
-              <label htmlFor="gym">Nom du club / gym</label>
-              <input
-                id="gym"
-                type="text"
-                name="gym"
-                value={formData.gym}
-                onChange={handleChange}
-                placeholder="Votre club BJJ"
-                disabled={isSubmitting}
-              />
-            </div>
-
-            {/* Coach Name (Optional) */}
-            <div className="form-group">
-              <label htmlFor="coachName">Entraîneur</label>
-              <input
-                id="coachName"
-                type="text"
-                name="coachName"
-                value={formData.coachName}
-                onChange={handleChange}
-                placeholder="Nom de votre entraîneur"
                 disabled={isSubmitting}
               />
             </div>

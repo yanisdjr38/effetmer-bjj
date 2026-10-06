@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TrainingScheduleManager from "../components/TrainingScheduleManager";
 import { useApp } from "../context/AppContext";
@@ -14,10 +14,18 @@ function SettingsPage() {
   const { user, logout } = useAuth();
   const [saveStatus, setSaveStatus] = useState("");
   const [logoutConfirm, setLogoutConfirm] = useState(false);
+  const flashTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (flashTimeoutRef.current) clearTimeout(flashTimeoutRef.current);
+    };
+  }, []);
 
   const flashStatus = (message) => {
     setSaveStatus(message);
-    window.setTimeout(() => setSaveStatus(""), 2000);
+    if (flashTimeoutRef.current) clearTimeout(flashTimeoutRef.current);
+    flashTimeoutRef.current = window.setTimeout(() => setSaveStatus(""), 2000);
   };
 
   const handleToggle = useCallback(
@@ -29,6 +37,26 @@ function SettingsPage() {
       flashStatus("Settings saved!");
     },
     [settings, updateSettings],
+  );
+
+  const notificationTypes = settings.notificationTypes || {
+    trainingReminders: true,
+    achievementUnlocked: true,
+    monthlyChallenges: false,
+  };
+
+  const handleToggleNotificationType = useCallback(
+    (key) => {
+      updateSettings({
+        ...settings,
+        notificationTypes: {
+          ...notificationTypes,
+          [key]: !notificationTypes[key],
+        },
+      });
+      flashStatus("Settings saved!");
+    },
+    [settings, notificationTypes, updateSettings],
   );
 
   const handleThemeChange = useCallback(
@@ -146,7 +174,8 @@ function SettingsPage() {
             >
               <input
                 type="checkbox"
-                defaultChecked
+                checked={notificationTypes.trainingReminders}
+                onChange={() => handleToggleNotificationType("trainingReminders")}
                 disabled={!settings.notifications}
               />
               <span>Rappels d'entraînement</span>
@@ -157,7 +186,8 @@ function SettingsPage() {
             >
               <input
                 type="checkbox"
-                defaultChecked
+                checked={notificationTypes.achievementUnlocked}
+                onChange={() => handleToggleNotificationType("achievementUnlocked")}
                 disabled={!settings.notifications}
               />
               <span>Accomplissement débloqué</span>
@@ -166,7 +196,12 @@ function SettingsPage() {
               className={styles.checkboxItem}
               style={{ opacity: settings.notifications ? 1 : 0.5 }}
             >
-              <input type="checkbox" disabled={!settings.notifications} />
+              <input
+                type="checkbox"
+                checked={notificationTypes.monthlyChallenges}
+                onChange={() => handleToggleNotificationType("monthlyChallenges")}
+                disabled={!settings.notifications}
+              />
               <span>Défis mensuels</span>
             </label>
           </div>

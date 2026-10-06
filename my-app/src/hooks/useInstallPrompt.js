@@ -31,20 +31,17 @@ export const useInstallPrompt = () => {
     if (isStandaloneMode) {
       setIsStandalone(true);
       setIsInstalled(true);
-      console.log("✅ Running in standalone PWA mode");
       return;
     }
 
     // Check localStorage for previous installation
     if (localStorage.getItem(STORAGE_INSTALLED_KEY)) {
       setIsInstalled(true);
-      console.log("✅ App was previously installed");
       return;
     }
 
     // Check if user dismissed in this session
     if (sessionDismissed) {
-      console.log("ℹ️ User dismissed install prompt this session");
       return;
     }
 
@@ -56,9 +53,6 @@ export const useInstallPrompt = () => {
       const daysSinceDismissal = (now - dismissedDate) / (1000 * 60 * 60 * 24);
 
       if (daysSinceDismissal < DISMISSAL_COOLDOWN_DAYS) {
-        console.log(
-          `ℹ️ Install prompt dismissed ${Math.floor(daysSinceDismissal)} days ago, cooldown active`,
-        );
         return;
       } else {
         // Cooldown expired, remove dismissal marker
@@ -69,14 +63,12 @@ export const useInstallPrompt = () => {
     // Setup beforeinstallprompt listener (Android)
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
-      console.log("🎯 beforeinstallprompt event fired - app can be installed");
       setDeferredPrompt(e);
       setCanInstall(true);
     };
 
     // Setup appinstalled listener
     const handleAppInstalled = () => {
-      console.log("✅ App successfully installed");
       setDeferredPrompt(null);
       setCanInstall(false);
       setIsInstalled(true);
@@ -114,18 +106,16 @@ export const useInstallPrompt = () => {
 
     try {
       deferredPrompt.prompt();
-      const result = await deferredPrompt.userChoice();
+      const result = await deferredPrompt.userChoice;
 
       if (result.outcome === "accepted") {
-        console.log("✅ User accepted install prompt");
         return true;
       } else {
-        console.log("❌ User dismissed install prompt");
         handleDismiss(true); // Start 7-day cooldown
         return false;
       }
     } catch (error) {
-      console.error("❌ Install prompt error:", error);
+      console.error("Install prompt error:", error);
       return false;
     }
   };
@@ -140,9 +130,6 @@ export const useInstallPrompt = () => {
 
     if (cooldown) {
       localStorage.setItem(STORAGE_DISMISSAL_KEY, new Date().toISOString());
-      console.log("ℹ️ Install prompt dismissed, 7-day cooldown started");
-    } else {
-      console.log("ℹ️ Install prompt dismissed this session only");
     }
   };
 

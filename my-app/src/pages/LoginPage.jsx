@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import "./LoginPage.scss";
@@ -20,6 +20,13 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const redirectTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimeoutRef.current) clearTimeout(redirectTimeoutRef.current);
+    };
+  }, []);
 
   /**
    * Auto-detect magic link callback parameters
@@ -39,7 +46,7 @@ export default function LoginPage() {
           setIsSubmitting(true);
           await verifyLogin(urlEmail, urlToken);
           setSuccess("Authentification réussie ! Redirection...");
-          setTimeout(() => {
+          redirectTimeoutRef.current = setTimeout(() => {
             navigate("/");
           }, 500);
         } catch (err) {
@@ -96,7 +103,7 @@ export default function LoginPage() {
       await verifyLogin(email, token);
       setSuccess("Authentification réussie ! Redirection...");
       // Navigate based on profile completeness will be handled by App.js
-      setTimeout(() => {
+      redirectTimeoutRef.current = setTimeout(() => {
         navigate("/");
       }, 500);
     } catch (err) {

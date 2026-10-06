@@ -294,3 +294,41 @@ export const calculateWeeklyIntensity = (
     totalDurationHours: Math.round(totalDurationHours * 10) / 10,
   };
 };
+
+/**
+ * Calculate the real progress of a personal goal based on actual training
+ * data recorded since the goal was created. Goals of category "other" have
+ * no automatic source of truth and keep their manually-tracked value.
+ * @param {Object} goal - {category, target, current, createdAt}
+ * @param {Array} trainingSessions - Array of {date, duration, ...}
+ * @param {Array} techniques - Array of {id, category, ...}
+ * @returns {number} current progress value (same unit as goal.target)
+ */
+export const computeGoalProgress = (goal, trainingSessions = [], techniques = []) => {
+  if (!goal) return 0;
+
+  const createdAt = goal.createdAt ? new Date(goal.createdAt).getTime() : 0;
+
+  switch (goal.category) {
+    case "sessions":
+      return trainingSessions.filter(
+        (s) => new Date(s.date).getTime() >= createdAt,
+      ).length;
+
+    case "duration":
+      return trainingSessions
+        .filter((s) => new Date(s.date).getTime() >= createdAt)
+        .reduce((sum, s) => sum + Number(s.duration || 0), 0);
+
+    case "techniques":
+      return techniques.filter((t) => (t.id || 0) >= createdAt).length;
+
+    case "submission":
+      return techniques.filter(
+        (t) => (t.id || 0) >= createdAt && t.category === "soumissions",
+      ).length;
+
+    default:
+      return goal.current || 0;
+  }
+};

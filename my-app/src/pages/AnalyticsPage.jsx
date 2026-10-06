@@ -112,7 +112,7 @@ const LineChart = memo(function LineChart({ data, label, color = "#59d8e5" }) {
         {/* Points */}
         {validData.map((value, index) => (
           <circle
-            key={index}
+            key={`point-${index}`}
             cx={padding + index * pointsSpacing}
             cy={chartHeight - (value / maxValue) * (chartHeight - padding)}
             r="5"

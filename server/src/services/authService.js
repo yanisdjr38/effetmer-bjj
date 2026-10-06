@@ -119,7 +119,7 @@ export const refreshAccessToken = async (refreshTokenString) => {
   try {
     // Decode refresh token to get userId
     const decoded = verifyRefreshToken(refreshTokenString);
-    const userId = decoded.sub;
+    const userId = decoded.userId;
 
     // Find and verify stored token
     const storedTokens = await RefreshToken.find({
